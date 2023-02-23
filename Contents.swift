@@ -177,3 +177,81 @@ repeat {
 } while sum < 10
 
 // they differ by results so you must be careful with what you intend to achieve. 
+//adding break mechanism
+
+while true {
+    sum = sum + ( sum - 1)
+    if sum >= 100 {
+        break
+    }
+} // adding a break mechanism in between
+
+var counter = 0
+while counter < 10 {
+    counter = counter + 1
+    print("counter equals to \(counter)")
+}
+
+var roll = 0
+counter = 0
+repeat {
+    roll = Int.random(in: 0...5)
+    counter += 1
+    print("after \(counter) rolls, roll is \(roll)")
+    if roll == 0 {
+        break
+    }
+} while true
+
+/*let firstName = "Matt"
+if firstName == "Matt" {
+  let lastName = "Galloway"
+} else if firstName == "Ray" {
+  let lastName = "Wenderlich"
+}
+let fullName = firstName + " " + lastName // because its out of scope
+*/
+
+// attempt at making a snake and ladder game
+//var dice = Int.random(in: 0...6)
+var currentPosition = 0
+
+repeat {
+    var 🎲 = Int.random(in: 0...6)
+    🎲
+    print(" 🎲 \(🎲)")
+    currentPosition += 🎲
+    if currentPosition == 3 {
+        currentPosition = 15
+        print("🪜")
+    } else if currentPosition == 17 {
+        currentPosition = 11
+        print("🐍 \(currentPosition)")
+    } else if currentPosition == 12 {
+        currentPosition = 27
+        print("🪜")
+    } else if currentPosition == 48 {
+        currentPosition = 10
+        print("🐍 \(currentPosition)")
+    } else if currentPosition == 52 {
+        currentPosition = 2
+        print("🐍\(currentPosition)")
+    } else if currentPosition > 100 {
+        var rollback = (currentPosition - 100)
+        currentPosition -= (rollback * 2)
+        print("\(currentPosition) 🔙")
+    } else if currentPosition == 98 {
+        currentPosition = 0
+        print("🐍 \(currentPosition)")
+    } else if currentPosition == 100 {
+        print(" Game over ✨ \(currentPosition)")
+        break
+    }
+} while true
+
+
+// thats a good snake and ladder game
+// challenge years
+print(sqrt(2))
+print(sqrt(4))
+// advanced control flow page 94
