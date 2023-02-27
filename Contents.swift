@@ -255,3 +255,57 @@ repeat {
 print(sqrt(2))
 print(sqrt(4))
 // advanced control flow page 94
+// countable ranges
+
+let cloaserange = 1...5 // closed because it is inclusive of 1 to 5 alon
+let halfOpenedrange = 1..<5 // 1 to 4 but not including 5 is the meaning of this range
+
+var count = 0
+var team1counter = 0
+var team2counter = 0
+repeat {
+    var 🎲 = Int.random(in: 1...6)
+   // var team1counter = 0
+   // var team2counter = 0
+    var team1 = Int.random(in: 1...6)
+    var team2 = Int.random(in: 1...6)
+    //var count = 0
+    team1
+    team2
+    🎲
+    count += 1
+    if team1 > team2 {
+        print("team 1 has the lead")
+        team1counter += 1
+    } else if team2 > team1 {
+        team2counter += 1
+        print("team 2 has the lead")
+    } else if 🎲 > team2 {
+        print("Team2 Nullyfied")
+        team2counter -= 1
+    } else if 🎲 > team1 {
+        print("Team1 nullyfied")
+        team1counter -= 1
+    }
+    
+    if count == 7 {
+        print("game over, team1  got \(team1counter), while team2 got \(team2counter)")
+    }
+} while count <= 6
+
+// for loop in page 96
+let kevin = 10
+var sums = 0
+for i in 1...kevin { // full range
+    sum += i
+}
+
+for _ in 1...sum {
+    sum -= 1
+}
+
+print(sum)
+for i in 1...kevin where i % 2 == 0 {
+    sum += i
+}
+//page 100/555
