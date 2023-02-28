@@ -309,3 +309,123 @@ for i in 1...kevin where i % 2 == 0 {
     sum += i
 }
 //page 100/555
+//learning continue
+
+sum = 0
+
+for row in 0...8 {
+    if row % 2 == 0 {
+        continue
+    } else {
+        sum += row
+    }
+    print(row, sum)
+}
+
+sum = 0
+
+for row in 0...8 {
+    for column in 0...8 {
+        if  column >= row {
+            continue
+        } else {
+            sum = row * column
+        }
+    }
+}
+print(sum)
+
+sum = 0
+for row in 0...8 {
+    for column in 0...8 where column <= row {
+        sum = column + row
+    }
+}
+print(sum)
+// labeled statements
+
+sum = 0
+outerLoop: for row in 0...8 {
+innerLoop: for colum in 0...8{
+    if row == colum {
+        continue outerLoop
+    }
+    sum += row * colum
+}
+}
+print(sum)
+// one example
+
+sum = 0
+rowLoop: for row in 0...8 {
+    columnLoop: for column in 0...8 {
+        if row == column {
+            continue rowLoop
+    }
+        sum += row * column
+  }
+}
+print(sum)
+sum = 0
+
+print(number)
+var timber = 1...10
+
+timberLoop: for tim in timber {
+    print(sqrt(Double(tim)))
+}
+
+for tim in timber {
+    print(tim * tim)
+}
+//---------------------- challanges
+sum = 0
+//innerLoop: for row in 0..<8 where row % 2 == 0 {
+   // continue innerLoop ( you can't use both where and continuue together
+//};for col in 0..<8 {
+//    sum += row * col
+//}
+outerLoop: for x in 0..<8 {
+innerLoop: for y in 0..<8 {
+    if x % 2 == 0 {
+        continue outerLoop
+    } else {
+        sum += x * y
+    }
+}
+}
+print(sum)
+// -------------------------- challenges
+
+outerLoop: for row in 0...8 where ((row % 2) != 0) {
+    for col in 0...8 {
+        sum += row * col
+    }
+}
+print(sum)
+// --------------------------- Again
+sum = 0
+
+for x in 0..<8 where x % 2 != 0 {
+    for y in 0..<8 {
+        sum += x * y
+    }
+}
+print(sum)
+// ----------------- Good ( done it ! )
+
+
+// switch statements
+
+sum = 10
+switch sum {
+case 8:
+    print("Nah!")
+case 9:
+    print("no, no, no")
+case 10:
+    print("got it")
+default:
+    print("whatever")
+}
+// advanced swift page 104
