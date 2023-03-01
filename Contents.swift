@@ -429,3 +429,164 @@ default:
     print("whatever")
 }
 // advanced swift page 104
+// multiple statement switch
+
+let hourOfday = 12
+var TimeofDay = ""
+
+switch hourOfday {
+case 1,2,3,4,5,6:
+    TimeofDay = "Morning time"
+case 7,8,9,10:
+    TimeofDay = "Afternoon time"
+case 11,12,13,14,15:
+    TimeofDay = "Noon time"
+case 16,17,18,19:
+    TimeofDay = "Evening time"
+case 20,21,22,23,24:
+    TimeofDay = "Late night"
+default:
+    TimeofDay = "Goodnight"
+}
+print(TimeofDay)
+
+// using ranges
+switch hourOfday {
+case 1...6:
+    TimeofDay = "Morning time"
+case 7...10:
+    TimeofDay = "Afternoon time"
+case 11...15:
+    TimeofDay = "Noon time"
+case 16...19:
+    TimeofDay = "Evening time"
+case 20...24:
+    TimeofDay = "Late night"
+default:
+    TimeofDay = "Goodnight"
+}
+print(TimeofDay)
+
+// with where clause
+switch hourOfday {
+case _ where hourOfday % 2 == 0:
+    print("testing")
+default:
+    print("notworking")
+}
+
+// you can also use let in case as a means to assign a number
+//partial matching
+
+let cordinates = (x: 12, y: 34, z: 90) // avoid duplicates
+switch cordinates {
+case (0,0,0):
+    print("origin")
+case (_,0,0):
+    print("x-axis")
+case (0,_,0):
+    print("y-axis")
+case (0,0,_):
+    print("z-axis")
+default:
+    print("partial matching")
+}
+
+// complex switch
+
+switch cordinates {
+case let(x,y,_) where y > x:
+    print("y axis is bigger \(y)")
+case let(x,y,_) where x > y : // when put like this it will be wihout scope when put like (x,y,z ) therefore you must engage let as a declaration to have it in scope
+    print("x is bigger than y \(x)") // its a matter of scope
+case let(x,_,z) where z > x:
+    print("z is bigger \(z)")
+default:
+    print("strange")
+}
+// excircise page 108
+
+var age = Int.random(in: 1...20)
+switch age {
+case 0...2 :
+    print("infant")
+case 3...5:
+    print("todler")
+case 6...10:
+    print("kid")
+case 11...13:
+    print("pre-interger")
+case 15...25:
+    print("legal adult")
+default:
+    break
+}
+
+//excercise 2
+var tup = (name: "yugo", age: 35)
+switch tup {
+case let(name, age) where name == "dan":
+    print("got you \(name) aged \(age)")
+case let(name, age) where age > 30:
+    print("this could be you \(name), aged \(age)")
+default:
+    break
+}
+
+//challenges
+sum = 0
+for i in sum...5 {
+    sum += i
+}
+print(sum)
+// another one
+var moth = ""
+while moth.count < 10 {
+    moth += "a"
+}
+print(moth)
+// counting backwards
+// chapter 5 functions page 111.
+
+//------------------------ basics
+func operningGreetings() {
+    print("Howdy partner !")
+}
+operningGreetings() // --------------- 1
+
+func multi(value: Int) {
+    print("\(value) * 5 = \(value * 5)")
+}
+multi(value: 20) // ------------------ 2
+
+func multip(add: Int, subs: Int) {
+    print("\(add + 10) is not the same as \(subs - 20)")
+}
+multip(add: 23, subs: 90) // ------------- 3
+
+func multipl(multiply: Int, whe crying: Int) {
+    print("honest just testing this idea out \(multiply) and \(crying)")
+}
+multipl(multiply: 23, whe: 22)
+// ---------------------------------------- 4 external name
+
+func multiplll(_ ext: Int, _ nothing: Int) {
+    print("\(ext) like that \(nothing)")
+}
+multiplll(34, 30) // -------------------- 5 removing the outername wiht a dash _
+
+func provideDefault(_ number: Int, default num: Int = 234) {
+    print("this is almost like a declaration \(number + num)")
+}
+provideDefault(1,default: 90) // so it wont show up uless prompted to do so, the default parameter.
+
+// functions with return values
+
+func withReturnvalue(defaul: Int = 10, to be: Int) -> Int {
+    return (defaul * be)
+}
+
+let conta = withReturnvalue(defaul: 90, to: 78) // must follow the order of invocation in the parameter setting
+// page 116 ending here today.
+
+
