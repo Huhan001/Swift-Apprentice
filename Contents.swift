@@ -589,4 +589,48 @@ func withReturnvalue(defaul: Int = 10, to be: Int) -> Int {
 let conta = withReturnvalue(defaul: 90, to: 78) // must follow the order of invocation in the parameter setting
 // page 116 ending here today.
 
+func multiplyAndDivide(_ number: Int, by factor: Int) -> (product: Int, qoutient: Int) {
+    return (number * factor, number/factor)
+} // multiple return statements, mind the brackets on both return and the multiple returns, best give them names
+// for simple function you do not have to include return, you can go without it, but for more complex function, then you will need to include the return statement
+let results = multiplyAndDivide(2, by: 9)
 
+//-------------------------------- Advanced function parameter handling
+func increment(_ value: inout Int) {
+    value += 1
+    print(value)
+}
+increment(&sum) // you need to add inout followed by an amper & in the paramaters to stop the compiler from copying and then spitting out the number.
+
+func firstNameLastname(first: String, last: String) -> (String,String) {
+    return (first, last)
+}
+firstNameLastname(first: "Humphrey", last: "Hanson")
+
+//..
+func calculatefullName(first: String, last: String) -> String {
+    return first + last
+}
+let naming = calculatefullName(first: "Hump", last: "hrey")
+//..
+func CalculatefullName(first: String, last: String) -> (String, String, Int) {
+    let inside = last+first
+    return (first,last,inside.count )
+}
+
+print(CalculatefullName(first: "Humphrey", last: "Hanson"))
+//.. calculated and gave out the lengh of the string
+
+func addingBythree(value: inout Int) {
+    print(value += 3)
+}
+addingBythree(value: &sum) // awesome
+
+//.. funcitons as variables
+var function = calculatefullName
+function("humphr", "hanson")
+
+var addiotional = addingBythree
+addiotional(&sum) // you will have to do it yourself adding &
+// you can pass functions as variables so long as you do not include their brackets
+// page 121
