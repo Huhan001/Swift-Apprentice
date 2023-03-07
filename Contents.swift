@@ -634,3 +634,99 @@ var addiotional = addingBythree
 addiotional(&sum) // you will have to do it yourself adding &
 // you can pass functions as variables so long as you do not include their brackets
 // page 121
+
+//passing funcitons inside other functions
+func anotherFunction(function: (Int, Int) -> Int, _ a: Int, _ b: Int) {
+    let result = function(a, b)
+    print(result)
+}
+// understood
+// the function wa spassed as the parameter nothing more. not much into the code other than the function passed as a parameter.
+
+// documenting funcitons
+
+/// Creting a function than reduces its number each time.
+/// - paramaters
+///     - a : the number
+/// - thats the end of it. this is only a mere testing
+func reducingFunction(reduce a: inout Int) {
+    a -= 1
+    // sometimes you can choose to include return or not for small functions
+    // but the inout doesnt work well wiht return type Int for any for that matter,
+    // is specified. -> Int/ Double/ String
+}
+
+reducingFunction(reduce: &sum)
+print(sum)
+reducingFunction(reduce: &sum)
+print(sum)
+
+// challanges
+
+
+for index in stride(from: 20, through: 10, by: -1) {
+    print(index)
+}
+// writing a funcitons to test whether an ouput is even or not
+
+func oddOReven( number: Int) {
+    if number % 2 == 0 {
+        print("\(number) : is Even")
+    }  else {
+        print("\(number): is Odd")
+    }
+}
+oddOReven(number: 101)
+// done it, better yet i can follow the book and do according to it.
+func isOdd(number: Int) -> Bool {
+    if number % 2 == 0 {
+        return true
+    } else {
+        return false
+    }
+}
+isOdd(number: 24)
+//----------------------------
+func rooting(x: Int) -> Int {
+    return x * x
+}
+for x in stride(from: 1, to: 15, by: 3) {
+    if rooting(x: x) % 2 == 0 {
+        print("\(x) is even")
+    } else {
+        print("\(x) is odd")
+    }
+}
+//-------------- challanges from page 127
+// decoding a fabonachi
+
+// page 129 Options.
+
+//chapter 6: Options
+// sentinel value - the value that represents the absence of another value.
+// options is a type of number that either has a value or does not.
+// other than using 0 or nil, which still signify a number, the optional type uses the ? (question mark) annotation to mark that a value has either a value or not.
+
+var myFavourite: String?
+myFavourite = "Savior Jesus"
+print(myFavourite)
+
+let pasedInt = Int("dog")
+pasedInt
+
+var opLooking: Int? = 10
+print(opLooking! + 1) // what i ddi here is unwrapped the box that held the value 10. therefore was able to work with the value 10 + 1
+
+opLooking = nil
+// how to supress the error from occuring.
+if opLooking == nil {
+    print("possible error")
+} else {
+    print("\(opLooking!)")
+} // but you will have to supress this forever so long as you use the optional wrapper
+
+// page 136 optional binding. Thank you Jesus Christ. 
+
+
+
+
