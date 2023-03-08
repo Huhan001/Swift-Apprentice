@@ -725,8 +725,131 @@ if opLooking == nil {
     print("\(opLooking!)")
 } // but you will have to supress this forever so long as you use the optional wrapper
 
-// page 136 optional binding. Thank you Jesus Christ. 
+// page 136 optional binding. Thank you Jesus Christ.
+// optional binding
+var somethingSomething: Int?
+if let somethingSomething = somethingSomething,
+   somethingSomething > 10 {
+    print("works after both options are true")
+} else {
+    print("doesn't work, yet works accordingly")
+}
+// safe unwrapping right there.
+// several let statements on the if-statement.
 
+//introducing guard statement.
+// used when fetching infoarmation from the internet but could have either nil or the api can fail.
+// guard example on a function
 
+func bringSoandSo(name: String) -> Int? {
+    switch name {
+    case "ramon":
+        return 10
+    case "jonah":
+        return 12
+    case "zack":
+        return 15
+    case "tom":
+        return 20
+    default:
+        return nil
+    }
+}
 
+var use = bringSoandSo(name: "ramon") // the esense of optionals is that theier output can never be used for compution unless you unwrap them
+
+//--------------------
+if var use = use {
+    print(use)
+} else {
+    print("whaterver")
+}
+use! += 1
+print(use!)
+//--------------------
+func tryingWhaterver(shape: String) {
+    let usei = bringSoandSo(name: shape)
+    if let usei = usei {
+        print("\(usei) real name is \(shape)")
+    } else {
+        print("it was a try")
+    }
+}
+tryingWhaterver(shape: "zack")
+
+// now with the guar statement..
+
+func anothertrying(shape: String) {
+    let wewe = bringSoandSo(name: shape)
+    guard let wewe = wewe else {
+        print("was no good my boy")
+        return
+    }
+    print("\(shape) is \(wewe)")
+}
+anothertrying(shape: "zack")
+// guard statement starts with guard then ends wiht else
+// guard is good
+
+//------------------------------------------------ function that takes another function
+func useInside(enter: Int, calc: Int) -> String {
+    let vision = enter * calc
+    if vision >= 25 {
+        return "It is as should be"
+    } else {
+        return "It is not as ought to be"
+    }
+}
+
+func theOutsider(function: (Int, Int) -> String, a: Int, b: Int) {
+    let output = function(a,b)
+    print(output)
+}
+
+theOutsider(function: useInside, a: 5, b: 4)
+// --------------------------------------------------- just like that
+// back to options
+// nil coalecing using ?? and forcing the input from the optionals to come out
+
+var anotheroPTional: Int? = 10
+if let anotheroPTional = anotheroPTional {
+    print(anotheroPTional)
+} else {
+    print("what've")
+}
+// same as
+
+var pickingUp = anotheroPTional ?? 0 // ( the 2 question marks unwrapped the funciton)
+print(pickingUp)
+
+var user: String? = nil
+// challeneges by optionals
+
+func divisbleByWhole(number: Int, by: Int) -> Int? {
+    var result: Int?
+    if number % by == 0 {
+        result = number / by
+        } else {
+            result = nil
+        }
+    return result
+}
+
+func unwrapSupre(number: Int, ad: Int) {
+    var jetson = divisbleByWhole(number: number, by: ad)
+    if let jetson = jetson {
+        print("\(number) is divible by \(ad) some \(jetson) without remainder")
+    } else {
+        print("i could possible have tanked this")
+    }
+}
+
+unwrapSupre(number: 99, ad: 3)
+
+// nested optionals
+var nestedOpitonals: Int??? = 10
+print(nestedOpitonals!!!)
+
+//collection type in section two.
+// page 144 thank you Jesus. 
 
