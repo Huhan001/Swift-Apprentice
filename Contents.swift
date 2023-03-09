@@ -853,3 +853,118 @@ print(nestedOpitonals!!!)
 //collection type in section two.
 // page 144 thank you Jesus. 
 
+// chapter 7.
+// collection type
+// Arrays
+
+let eevenNumber = [2,4,6,8,10] // squarebrackets to create arrays for (inferation)
+let odddNumber: [String] = [] // infering an empty array
+let defaultArrays = Array(repeating: 0, count: 5)
+
+//mutable array
+var listOFcHANGE = ["neema", "zack", "pendo", "jonah", "londo"]
+// imagine before a game you want to make sure whether the list is not empty
+print(listOFcHANGE.isEmpty) // isEmpty is a property. more on this on chapter 11
+// Array is not empty but you need atleast 2 players ot start the game
+
+if listOFcHANGE.count > 3 {
+    print("start the game")
+} else {
+    print("wait up")
+}
+
+// getting the first name to start the game ( use property )
+
+var firstPlayer = listOFcHANGE.first
+print(firstPlayer as Any) // it becomes an optional due to if there wasnt any first variable to pic from, the property would have returned nil. so to print this you a (as Any) .
+print(listOFcHANGE.last as Any)
+print(listOFcHANGE.min() as Any) // returns the lowest in alphabetical order.
+
+// there seem to be a clear difference between methods and properties.
+// methods have brackets while properties don't.
+
+// subscripting
+print(listOFcHANGE[3]) // the use of brackets to access things is what is refered to as subscripting
+print(listOFcHANGE[1...3])
+
+print(listOFcHANGE.contains("jonah"))
+func isEliminated(name: String) -> Bool {
+    let give = !listOFcHANGE.contains(name) // using negation ! statement
+    return give
+}
+
+isEliminated(name: "neema")
+// adding elements to the array
+listOFcHANGE.append("sebastian") // append
+listOFcHANGE += ["gina"]
+
+// adding order
+listOFcHANGE.insert("jojono", at: 4) //insert at
+
+// removing player
+listOFcHANGE.removeLast() // this automatically removes the last name, which is gina in this case
+listOFcHANGE.remove(at: 3) // or pick at an index to remove someone.
+listOFcHANGE.lastIndex(of: "neema")
+
+// updating and subscripting done within the range
+listOFcHANGE[1...4] = ["yeyo", "wewo", "tewo", "sebo"]
+print(listOFcHANGE)
+
+// to change the element position can be achieved in several ways
+//  - by removing and adding back the element to the correct position with
+//      the insert method.
+listOFcHANGE.remove(at: 3)
+listOFcHANGE.insert("tewo", at: 2)
+//  - by swapping this i will try.
+listOFcHANGE.swapAt(3, 0) // done swaping
+//  - can also be achieved via sort
+listOFcHANGE.sort()// the differnce between sort and sorted is that sorted leaves the original value unchanged and returns a copy instead.
+
+// iterating through an Array.
+
+for z in listOFcHANGE {
+    print(z)
+}
+
+// if you want to print the index and name
+for (index, name) in listOFcHANGE.enumerated() {
+    print("\(index): \(name)")
+}
+
+// creating a dictionary
+var tengeDict: [String:Int] = [:] // empty dictinary
+tengeDict = ["jemani":10, "paul":34, "kaaa":9, "kymber":25]
+// or declare a new dictionary
+var sasaDuc = ["seman":90, "namu":78, "nased":23, "hakui":12]
+// you can also empty a whole dictionary with [:]
+
+sasaDuc = [:] // just like that, it's empty.
+//upon creating a nempty dictionary it is advised to improve its efficiency by designating its capacity fill.
+sasaDuc.reserveCapacity(34) // like this.
+
+print(tengeDict["paul"]!) // have to unwrap it. to view its contents within.
+
+// this is how you update dictionaries.
+sasaDuc = ["Hans":30, "Xayala":31, "Cornelious":1, "Avram": 2]
+sasaDuc["Ayla"] = 4
+sasaDuc.updateValue(3, forKey: "Cornelious") // another way to adding value on a dictionary. ( after updating the new value, it returns the old one just ot display, if the new one never existed, it would have returned nil )
+sasaDuc
+
+tengeDict.removeValue(forKey: "paul") // removing dictionary
+tengeDict
+tengeDict["jemani"] = nil // completely removes the value and list from the dictionary
+tengeDict
+
+for (_, x) in tengeDict { // (_) used to ignore
+    print(x)
+}
+ 
+for x in tengeDict.keys { // you can use values too as option.
+    print(x)
+}
+// page 164 sets. Thank you Christ Jesus. 
+
+
+
+
+
