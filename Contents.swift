@@ -709,7 +709,7 @@ for x in stride(from: 1, to: 15, by: 3) {
 
 var myFavourite: String?
 myFavourite = "Savior Jesus"
-print(myFavourite)
+print(myFavourite as Any)
 
 let pasedInt = Int("dog")
 pasedInt
@@ -963,6 +963,74 @@ for x in tengeDict.keys { // you can use values too as option.
     print(x)
 }
 // page 164 sets. Thank you Christ Jesus. 
+
+// declaring a set
+var setDeclaring: Set<Int> = [1] // you must write set, then brackets, then the value in brackets to create sets in swift
+//sets do not have literals, but you can use an array literal to declare a set
+
+var setFromArray = [10,2,3,4,5] // an array
+var setFromaray: Set<Int> = [1,2,3,4,5,6] // this is a proper set
+// another way to ensure inferation is to put set outside
+
+var creatiSets = Set([1,2,3,4,5])
+print(creatiSets.contains(3))
+let sometdfd = [Int]()
+let fridaynight: [Int] = []
+
+// removing first number occurance.
+
+func removingJuFirst(number: Set<Int>) -> Set<Int> {
+    var new: Set<Int> = []
+    var tobe = number.first
+    tobe = tobe!
+    for num in number where num != tobe {
+        new.insert(num)
+    }
+    return new
+}
+//var seingIsBealing = removingJuFirst(number: setFromArray)
+// well done over there.
+// now tring the same for a set
+var seeingIsBeli: Set<Int> = removingJuFirst(number: creatiSets) // because sets are never in roder so you will never know if you deleted the first or not.
+func removeGivenNumber(whole ipo: Set<Int>, number: Int) -> Set<Int> {
+    var newset: Set<Int> = []
+    for something in ipo where something != number { // always use the immidiate one to the type
+        newset.insert(something)
+    }
+    return newset
+}
+print(removeGivenNumber(whole: creatiSets, number: 5))
+
+/// Creating a function for reverse
+///     probably going to use the -1 indexing
+///         Hopefully it works
+
+func theReversePrint(value: [Int]) {
+    var look = stride(from: value.count-1, to: -1, by: -1)
+    var usiss: [Int] = []
+    for x in look {
+        usiss.append(value[x])
+    }
+    print(usiss)
+}
+var lilopu: [Int] = [1,2,3,4,5,6]
+theReversePrint(value: lilopu)
+
+// archieve inverse without the inverse function
+var sd = stride(from: 10, to: 100, by: 4)
+var loeekWhat: [Int] = [10, 20,23, 45, 56,34 ,25, 667, 909]
+theReversePrint(value: loeekWhat)
+// ------------------------ worked on reverese and it was awesome
+
+var dikOFdik: [Int:[Int:Int]] = [1:[2:4], 2:[3:4]] // so you can make dictionary of dictionaries. nice
+
+var nameTitleLookup: [String: String?] = ["Mary": "Engineer","Patrick": "Intern", "Ray": "Hacker"]
+nameTitleLookup["Patrick"] = nil
+nameTitleLookup.removeValue(forKey: "Ray")
+print(nameTitleLookup)
+
+// page 171, chapter 8, collection iterations with closures
+
 
 
 
