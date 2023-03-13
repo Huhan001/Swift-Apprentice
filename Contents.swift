@@ -1030,6 +1030,124 @@ nameTitleLookup.removeValue(forKey: "Ray")
 print(nameTitleLookup)
 
 // page 171, chapter 8, collection iterations with closures
+//chapter 8 closure
+// closures are funcitons without names
+
+// to use a closure, you must first assign it a function
+var mmultiplyClosure: (Int, Int) -> Int // this is how you would assign a function but without the types declaration, almost the same you would within a function.
+mmultiplyClosure = { (a, b) in a * b }
+//or
+mmultiplyClosure = { $0 * $1 }
+// this works because we already defined the type of closure.
+
+/// needs space within before computing, space between python set braces
+/// equal sign this time.
+/// must use the "in"
+var multiplyClosure = { (x: Int, y: Int) -> Int in
+    return x * y
+}
+let testingClosure = multiplyClosure(2, 3) // closures have no external names
+// several ways to shorten a closure.
+
+var shortenedClosure: (Int, Int, Int) -> Int
+shortenedClosure = { $0  + $1 * $2 }
+// now for the longer version
+
+var longerClosure = { ( g: Int, u: Int) -> Bool in
+    if g > u {
+        return true
+    } else {
+        return false
+    }
+}
+var someDhu = longerClosure(2, 7)
+someDhu.toggle()
+
+func closureTesting(_ a: Int, _ b: Int, put: (Int, Int) -> Int) -> Int {
+    let some = put(a, b)
+    return some
+}
+closureTesting(2, 3, put: multiplyClosure)
+// worked
+
+//func definedInsideClosure(you: Int, me: Int, inside: { (you, me) in you * me }) -> Int {
+//    let come = inside(you, me)
+//    return come
+//}
+var inside: (Int, Int) -> Int
+inside = { (a, b) in  a + b}
+var outOfHere = { ( d: Double, rer: Double) -> Double in
+    return d + rer
+}
+func additionsClosure(a: Double, b: Double, close: (Double, Double) -> Double) -> Double {
+    let see = close(a,b)
+    return see
+}
+additionsClosure(a: 23.0, b: 34.2, close: outOfHere)
+// should work just like how a function works, a namesless function, it requires a return so it can return.
+//either define the function beforehand or do so within.
+// i advice against declaring closures within a fucntion.
+
+//func declaredWithinClosure(_ d: Int, rapa: Int, close: { (d: Int, rapa: Int) -> Int in return $0 + $1}) -> Int {
+//    let you = close(d, rapa)
+//    return you
+//}
+
+//looks like to properly incorporate in a function other that defining a closure beforehand is to create the functions first and make provisions for it first.
+
+func definedInsideClosure(buy: Double, from: Double, close: (Double, Double) -> Double) -> Double {
+    let find = close(buy, from)
+    return find
+}
+
+definedInsideClosure(buy: 3.0, from: 4.5, close: { (buy, from) in buy + from})
+// yeah that was not so convincing.
+
+var closeOFclose = { ( rot: Int, youk: Int) -> Int in
+    rot + youk
+}
+// i think this is the best there is.
+// another inside defined fucntion closre.
+
+func jumjumLik(fol: Double, love: Double, closed: (Double, Double) -> Double) -> Bool {
+    let output = closed(fol, love)
+    if output > 100 {
+        return false
+    } else {
+        return true
+    }
+}
+
+print(jumjumLik(fol: 8.3, love: 9.9, closed: { (fol, love) in  fol * love}))
+// so in function delcaring is the same as declare first then use later.
+// you cannot use the long version within a function.
+// just declare the names and do not forget the in itsa must have for closures.
+// works regardless of the name... of definition, initial definition.
+
+//upstaging my closure  functions
+// use void declarion to say the closure has no parameters
+//() -> void
+
+var comehereClose = { ( b: Int, c: Int) -> Int in b * c}
+var goherePlease: () -> Void = {
+    print("check me out!")
+}
+goherePlease()
+// so the type is [ () -> Void ]
+
+var cheese = 90
+let someoneElse = { cheese += 1 }
+someoneElse()
+someoneElse()
+
+
+var gogeHelp = { print("have you seen them!") }
+gogeHelp()
+// page 177
+// thank you Jesus Christ.
+
+
+
 
 
 
