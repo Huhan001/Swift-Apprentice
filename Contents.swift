@@ -1146,11 +1146,158 @@ gogeHelp()
 // page 177
 // thank you Jesus Christ.
 
+func TestingIncrementalClosure() -> () -> Int {
+    var unit = 0
+    var closured = { () -> Int in
+        unit += 1
+        return unit
+    }
+    return closured
+}
+
+TestingIncrementalClosure()
+TestingIncrementalClosure()
+
+/// Defining the closure.
+/// Lets takes an empty input, return and empty input and eventually return an Int
+/// () -> () is to define a closure function
+func aNotherClosure() -> () -> Int {
+    var rafa = 0
+    var tyung: () -> Int
+    tyung = { () in rafa + 10 }
+    return tyung
+}
+
+var zamadi = [6,5,4,3,2,1]
+zamadi.forEach {print("\($0): \($0+$0)")}
+
+let values = [1, 2, 3, 4, 5, 6]
+values.forEach {
+  print("\($0): \($0*$0)")
+}
 
 
+var comeonNow = { () -> () in print("sick")}
+comeonNow()
+
+print(zamadi.filter { $0 > 3 })
+
+zamadi.sort() // changes the originals values position
+print(zamadi.first { $0 > 4}!)
+zamadi.map { $0 * 9} // doesnt change the original
+zamadi.map { Double($0) * 0.9 } // map to filter or even change input value and type
+// you can use compact map to filter invalid numbers
+let userInputNested = [["0", "1"], ["a", "b", "c"], ["💽"]]
+let allUserInput = userInputNested.flatMap {
+$0
+}
+// flatmap tosses the not so useful type and replaces it with a 0
+let stock = [1.5: 5, 10: 2, 4.99: 20, 2.30: 5, 8.19: 30]
+let calculatedStock = stock.reduce(0) { $0 + $1.key * Double($1.value) }
+// reduce is used for summation or calculations. just put 0 and then extend the closure to work out the math,
+
+let farmAnimals = ["⌚️": 5, "📲": 10, "🖥️": 50, "🖱️": 1]
+var alterSEE: [String] = []
+var tu = 0
+for (x, y) in farmAnimals {
+    alterSEE.append(x)
+    tu += y
+}
+alterSEE.dropFirst(2) // dropping arrays or chop
+var rynningOut = [1,2,3,4,5,6,7,8,9,10,11]
+rynningOut.prefix(upTo: 4)
+rynningOut.suffix(from: 3) // prefix and suffix use interchangably as pleased
+rynningOut.removeAll() { $0 > 5}
+
+// lazy collection.can be called upon only when needed.
+
+var names = ["asu", "yurt", "opoe", "aqse", "rtyui"]
+print(names.filter { $0.count > 4})
 
 
+// closures excercises of tests
 
+var apprentice: () -> Void = { () in print("Swift Apprentice is a great book!")}
+var allitleDiifer = { (rit: Int, wer: Int) -> Int in rit + wer }
+
+func repeating(several: Int, closer: () -> Void)  {
+    for _ in 1...several { closer() }
+    // easy, sometimes just remove the print initiative
+}
+repeating(several: 10, closer: apprentice)
+
+//challenge 2
+// when there is two like this, you can work.
+var closerOFClosrer = { ( value: Int, go: Int) -> Int in
+    value + go
+}
+//but one always returns ()
+var singapore = { (value: Int) -> () in
+    var staten = 0
+    for x in 1...value {
+        staten += x
+    }
+    print(staten)
+}
+
+func mathSum(lengh: Int, close: (Int) -> ()) {
+    singapore(lengh)
+}
+mathSum(lengh: 5, close: singapore)
+// over understood closures.
+
+//page 188 strings
+// you cannever index a string due to grapheme substring ( something ) basically strings are represented by numbners and tehrefore you cannver pic a number to represent it.
+// see page 1255 for explanation
+
+var cafe = "cafeine"
+cafe.count
+cafe.unicodeScalars.count
+// understood.
+
+for x in cafe.unicodeScalars {
+    print(x.value)
+}
+
+cafe[cafe.startIndex] // obtaining the first character via index
+//cafe[cafe.endIndex] throws an error because the endindex is one index past the end of the string. somehow makes sense
+
+cafe[cafe.index(before: cafe.endIndex)] // works
+
+cafe[cafe.index(cafe.startIndex, offsetBy: 3)] // this is another way to offset theindex by a certain amount
+// all this is neccesary because of the grapheme cluster.
+
+let camp = "matt"
+let backwards = camp.reversed()
+backwards[backwards.index(after: backwards.startIndex)] // that was long back the string is backwards now.
+
+//to have a raw string that is a string with all its bell and whistle you use the # hast tag. example.
+let raw = #"look at this" is could be anything really"#
+print(raw) // prints it all wiht anything included within
+
+// you can perform interpolation with raw string. thou i would advise against it.
+//let can = "can do that too"
+//let raw3 = #"Yes we \#(can)!"#
+//print(raw3)
+// substrings page 197
+
+let fullName = "Humphrey Hanson"
+let substrings = fullName.firstIndex(of: " ")!
+fullName[fullName.startIndex..<substrings] // how to fetch names or part of names in form of substrings.
+// used force unwrap because i know one exists. susbtring basically getting the index before that particular value .
+
+
+let severaLNames = "Humphrey Hanson, Khayala Sadikhova"
+let substying = severaLNames.firstIndex(of: ",")!
+severaLNames[severaLNames.startIndex..<substying]
+// get the index of the value you are wanting to pull then work with count..< than to print the substring.
+
+//new type of range ..<value called the open end range, assumes
+//charaacter properties
+let charv: Character = "X"
+charv.isASCII // ASCII stands for American Standard Code for Information Interchange
+//Thank you Christ Jesus.
+// page 198
 
 
 
