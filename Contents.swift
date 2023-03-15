@@ -1299,5 +1299,174 @@ charv.isASCII // ASCII stands for American Standard Code for Information Interch
 //Thank you Christ Jesus.
 // page 198
 
+let hugo = "harambe harambe. come home now"
+let sgo = hugo.firstIndex(of: ".")!
+hugo[hugo.startIndex..<sgo]
+// well done. Have Mercy on me grace.
 
+let whiteSpaces: Character = "d"
+whiteSpaces.wholeNumberValue // you can convert character to number with wholeNumberValue
 
+// chapter 10
+// structures. // page 214.
+
+struct locations {
+    let x: Int
+    let y: Int
+}
+
+//to intantiate it.
+let storeLocation = locations(x: 23, y: 56) //🧩
+
+struct deliveryArea {
+    let center: locations
+    let radius: Double
+}
+
+var storeArea = deliveryArea(center: storeLocation, radius: 2.4)
+print(storeArea)
+
+// mini excercise
+/// a structure that represents a pizza order with toppings and everything inside it.
+///
+struct pizza { //🧩
+    let crust: String
+    let size: String
+    let toppings: String
+    let cook: Double
+}
+let pizzaOrder = pizza(crust: "thick", size: "large", toppings: "chicken", cook: 25.5)
+
+struct house { //🧩
+    var x: Int
+    var y: Int
+}
+var hausen = house(x: 23, y: 12)
+
+struct hereNow { //🧩
+    var x: Int
+    var y: Int
+}
+var storeFront = hereNow(x: 34, y: 23)
+
+struct shipPizza { //🧩
+    let cooked: pizza
+    var address: house
+    let store: hereNow
+    let begin: Bool
+}
+
+var PizzaDeliveryServices = shipPizza(cooked: pizzaOrder, address: hausen, store: storeFront, begin: true)
+// that is a big order. 🏟️
+
+// accessing the values.
+
+PizzaDeliveryServices.address.x // use the dot to find value
+PizzaDeliveryServices.cooked.cook // good
+PizzaDeliveryServices.address.x = 100
+
+// now write a function that combines this all and spits out the correct output
+
+// ------------------------------------------------------- ⚠️
+//off topic for a while as i create closures
+var closedClosedClosed = { () -> String in
+    var adams = "hellody"
+    return adams}
+closedClosedClosed()
+
+var sososos: () -> Void
+sososos = { () -> () in print("qwertyuiop")}
+
+var diceEmGood = { () -> () in print("🎲")}
+diceEmGood()
+diceEmGood()
+
+var returnquicly = { () -> () in
+    var sugar = 0.0
+    repeat {
+        sugar += 0.5
+        print("Stop Please!")
+    } while sugar < 2
+}
+diceEmGood()
+returnquicly()
+//-------------------------------------------------------- ⚠️
+
+struct orange {
+    var x: Int
+    var y: Int
+    var circle: Bool
+}
+
+var orangeSize = orange(x: 54, y: 40, circle: true)
+
+func calculatingOrangePrice(size: orange, priceRnage: String = "$35") {
+    var inside = size.x
+    var outside = size.y
+    var shape = size.circle
+    
+    if inside > 23 && outside > 35 {
+        print("Looking good for a \(shape) Orange, therefore lookout for the \(priceRnage)")
+    } else {
+        print("i wount spend more than \(priceRnage) on that one")
+    }
+}
+calculatingOrangePrice(size: orangeSize)
+// the struct is the type you put in on the function to use within or later. that the whole point of structs.
+
+//ordering chinese for delivery
+
+struct direction {
+    var longitude: Double
+    var latitude: Double
+    //var food: String
+}
+//⤵️
+struct wokfood {
+    var price: Double
+    var food: [String]
+    var distance: direction
+}
+
+var clientAddress = direction(longitude: 13.4, latitude: 45.29)
+var chinaWokDirection = direction(longitude: 37.2, latitude: 46.9)
+var ChinaWok = wokfood(price: 7.99, food: ["rice", "chips", "wings"], distance: chinaWokDirection)
+
+/// Always plan for a function
+///     Take the distance minus to calculate the distance
+///     check for payment
+///     then release the food
+///     with a notice of delivery time
+///     distance = √((lat2 - lat1)² + (lon2 - lon1)²)
+///     var chinaWokDirection = direction(longitude: 37.2, latitude: 46.9)
+func calculateEstimateChinaFoodShipping(Name: String, client: direction, order: wokfood, Cash: Bool) {
+    
+    // calculate distance
+    let distance = (order.distance.latitude - client.latitude) + (order.distance.longitude - client.longitude)
+    // checking for the food
+    let customerName = Name.firstIndex(of: " ")!
+    let actualName = Name[..<customerName]
+    //now print price menu and name
+    
+    // an if statement
+    if distance < 5 {
+        print("\nHowdy there! \(actualName) \n You can now proceed with ordering your meal for delivery. \n Please pick from our menu catalog of either \(order.food). \n All at a price of \(order.price) only")
+    } else if Cash == false {
+        print("\nHowdy there! \(actualName) \n You can now proceed with ordering your meal for delivery. \n Please pick from our menu catalog of either \(order.food). \n All at a price of \(order.price) only \n But All Payment Must Be Settled via $ Cash only")
+    } else if distance > 5 {
+        print("We are saddended to notify you that our services are yet to cover your region.")
+    }
+}
+calculateEstimateChinaFoodShipping(Name: "Humphrey Hanson", client: clientAddress, order:ChinaWok, Cash: false)
+
+var orderComingUp = { (order: String?) -> () in
+    if ChinaWok.food.contains(order!) {
+        print(" Your \(order!) will cost \(ChinaWok.price) please \n You may pay whenever your ready.")
+    }
+}
+orderComingUp("rice")
+// closure.
+// page 216
+
+// methods are functions that are member of types.
+// page 218. 
