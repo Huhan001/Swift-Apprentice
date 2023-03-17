@@ -1466,7 +1466,72 @@ var orderComingUp = { (order: String?) -> () in
 }
 orderComingUp("rice")
 // closure.
+
 // page 216
 
 // methods are functions that are member of types.
-// page 218. 
+// page 218.
+
+// swift public library
+// conforming to a protocal
+// these are rules that a particular set has to satisfy for it to be working. so it could be.
+
+//struct deliveryArea: CustomStringConvertible {
+//    let center: Int
+//    let radius: Double
+//    var description: String {
+//        """
+//Area with center: (x: \(center.x)
+//    }
+    
+//}
+
+// page 223
+// chapter 11 properties.
+// value inside a structure is called a property.
+
+struct AddressBook {
+    let name: String
+    var number: Int
+    var email: String
+    var locale: String
+    let gender: Character
+}
+
+var personOne = AddressBook(name: "Hanson", number: 2017_7433, email: "humphrey@icloud.com", locale: "Hausen", gender: "M")
+personOne.gender // property for you, storing value.
+
+// to be able to alter values on property, the initalized substance must be stored in var not let. example
+//personOne.gender = "F" // gives an error because tho the initalized persons is a var , the parent enviroment isnt.
+personOne.locale = "Frankfurt am Main" // worked
+
+// structure initialization.
+struct ConnEction {
+    var name: String
+    var age: Int
+    var relation = "Single"
+    var connectedness = "friend"
+}
+
+var HansPocket = ConnEction(name: "Khayala", age: 30, relation: "Wife", connectedness: "Prayer")
+HansPocket.connectedness // property have a noted p at the end whenever called upon
+// a [P] boxed p of sort.
+
+//computing structure.
+struct TV {
+    var height: Double
+    var width: Double
+    var diagonol: Int {
+        let result = ( height * height + width * width).squareRoot().rounded()
+        return Int(result)
+    }
+    //conputed property dont store any value, but they return the value fo calcularion
+    // instead of the assign parameter, you use the parentethes to enclose what your calculation and return value. no printing please
+}
+
+var SamsungTv = TV(height: 23.4, width: 43.7)
+SamsungTv.diagonol // calculated value
+
+// page 228. 
+
+
