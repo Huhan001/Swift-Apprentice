@@ -1532,6 +1532,150 @@ struct TV {
 var SamsungTv = TV(height: 23.4, width: 43.7)
 SamsungTv.diagonol // calculated value
 
-// page 228. 
+// page 228.
+// so far i have been using the getter.
+// enter the setter zone.
+
+// the getter and setter, getter is basically a calculated variable in a structure, while setter is more of a reverse ingeneering mechanism that can calculate and give value to the input. backwards compatability.
+
+struct GuesTheAge {
+    var father: Int
+    var mother: Int
+    var brother: Int = 10 // default setting if not specified.
+    var daughter: Int { // thats how you set a get or set
+        get {
+            var result: Int = 0
+            result = (father - brother * father - brother) - (mother - brother * mother - brother)
+            return Int(result / 2) + brother
+        }
+        set {
+            father = (brother - newValue) + 4  * 2
+            mother = father + 2
+        }
+    } // use new value if you will introduce a value using the ditermined getter
+}
+
+var tobias = GuesTheAge(father: 33, mother: 28)
+tobias.daughter = 23
+print(tobias)
+
+// setter is the reverse engineering of the the previous get
+// type properties
+
+// page 229
+// building multi-leveled game
+struct levels {
+    static var higherLevel  = 1
+    var id: Int
+    var name: String
+    var finish: Bool
+    var boss: String
+}
+
+var aSimpleGame = levels(id: 23, name: "james", finish: true, boss: "K.O")
+print(aSimpleGame)
+// was wondering how one can update value of property that is prescribed within a structure.
+// enter the willset and didset.
+
+struct deckosCard {
+    static var levelingUp: Int?
+    var lot: Int
+    var name: String
+    var ace: Bool {
+        didSet {
+            //if lot > 3 { return true }
+            var jaz = {() -> Int in return Int.random(in: 1...5)}
+            if ace == true { Self.levelingUp = jaz() }
+        }
+    }
+}
+
+var secko = deckosCard(lot: 4, name: "Hans", ace: true)
+deckosCard.levelingUp
+// ntoiced sentenec conditionals and they work good.
+
+struct sehiko {
+    static var lalala: Int = 1
+    var kitanda: Int
+    var mto: String
+    var kalala: Bool {
+        didSet {
+            var jaz = {() -> Int in return Int.random(in: 1...5)}
+            if kalala && kitanda > Self.lalala { Self.lalala = jaz() }
+            // this example here, regarding the simple boolean values.
+            // can be easily implemented.
+            //sehiko.lalala is anotherway of accesing the type property
+        }
+    }
+}
+
+// how else can you use didSet.
+// you can use it as a value blockage to set limits on what is acceptable and what is not acceptable.
+
+struct freeFoodPlease {
+    static var ageLimit = 35
+    //var name: String
+    //var gender: Character
+    var age: Int = 0 {
+        didSet {
+            if age > Self.ageLimit {
+                print(" Sorry Please,\n you exceed the required age limit")
+                age = oldValue
+            }
+        }
+    }
+}
+
+var carolina = freeFoodPlease()
+carolina.age = 45
+carolina.age
+
+// there stopped age from increasing. using self didget.
+// stroreValue has a didSet and willSet
+// computed values have getter and setter. ( get and set)
+
+struct ElectricCurrent {
+    static var maxVoltage = 200
+    var lightsOn = true
+    var voltage: Int = 100 {
+        willSet {
+            if newValue > Self.maxVoltage {
+                lightsOn.toggle()
+            }
+        }
+    }
+}
+
+var umeme = ElectricCurrent()
+umeme.voltage = 230
+umeme.lightsOn
+
+// the willset and didset work after initioation, not upon initiation.
+// for that sort of initiation i will need to use compute value the get and set sort.
+
+// page 233. lazy properties.
+// Thank you Christ Jesus. 
+
+
+// lazy property
+struct circle {
+    lazy var pi = {
+        ((4.0 * atan(1.0 / 5.0)) - atan(1.0 / 239.0)) * 4.0
+    } ()
+    var radius = 0.0
+    var circumfarence: Double {
+        mutating get {
+            pi * radius * 2
+        }
+    }
+    init(radius: Double) {
+        self.radius = radius
+    }
+}
+// only when you need the circumference will pi also be computed. this is used for heavy computation and i quite frankly find it unsuble yet.
+//📌
+var chocolare = { (345 * 34) }() // explains pi. use it without the parameters.
+chocolare // this is an interesting way to do something.
+// thank you Christ Jesus.
 
 
