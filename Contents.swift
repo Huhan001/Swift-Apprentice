@@ -1678,4 +1678,139 @@ var chocolare = { (345 * 34) }() // explains pi. use it without the parameters.
 chocolare // this is an interesting way to do something.
 // thank you Christ Jesus.
 
+// page 238 chapter 12
+// methods
+
+//let months = ["January", "February", "March",
+//                "April", "May", "June",
+//              "July", "August", "September",
+//              "October", "November", "December"]
+
+//struct SimpleDate {
+//    var month: String
+//    var time: Int
+//}
+
+//possible error with the code.
+//func CalculatingWinter(input: SimpleDate) -> Int {
+//    input.month.firstIndex(of: "December")! - input.month.firstIndex(of: date.month)!
+//}
+
+
+//let months = ["January", "February", "March",
+//              "April", "May", "June",
+//              "July", "August", "September",
+//              "October", "November", "December"]
+
+//struct SimpleDate {
+//  var month: String
+//}
+//func monthsUntilWinterBreak(from date: SimpleDate) -> Int {
+//  months.firstIndex(of: "December")! -
+//  months.firstIndex(of: date.month)!
+    // now it makes sense.
+//}
+
+struct WintercalculaterDate {
+    static var months = ["January", "February", "March",
+                         "April", "May", "June",
+                         "July", "August", "September",
+                         "October", "November", "December"]
+    var month: String
+    func monthsUnitWinter(from date: WintercalculaterDate) -> Int {
+        Self.months.firstIndex(of: "November")! - Self.months.firstIndex(of: date.month)!
+    }
+}
+
+let date = WintercalculaterDate(month: "October")
+date.monthsUnitWinter(from: date) // weird ( passing the instance back in as a parameter )
+// had to use static for this and self.
+// over-all, a function within a struct is what we call a method. but i could have accomplished this easily with getter and setter.
+//lets look into this further.
+
+// date.monthsUnitWinter()// error
+
+//excercise
+struct soccerSeason {
+    static var mwezi = ["January", "February", "March",
+                        "April", "May", "June",
+                        "July", "August", "September",
+                        "October", "November", "December"]
+    var mothn: String
+    var time:Int {
+        get {
+            var close = { () -> Int in
+                var time = 0
+                time = Self.mwezi.firstIndex(of: "December")! - Self.mwezi.firstIndex(of: mothn)!
+                return time
+            }
+            return close()
+        }
+    }
+}
+var sunday = soccerSeason(mothn: "April")
+sunday.time
+// slightly complicated getter. but not a major upset.
+
+var mwezi = ["January", "February", "March",
+             "April", "May", "June",
+             "July", "August", "September",
+             "October", "November", "December"]
+
+struct soccerTime {
+    var sebudu: String
+    func manyMonths() -> Int {
+        mwezi.firstIndex(of: "December")! - mwezi.lastIndex(of: sebudu)!
+    }
+}
+
+var shenko = soccerTime(sebudu: "April")
+shenko.manyMonths()
+// method, is a function within a struct. lets try doing this with closures
+
+//struct DoingThiswithStruct {
+    //var neno: String
+    //then alreayd defined closures don't seem to work at all
+    //var sebiop = { () -> Int in mwezi.firstIndex(of: "December")! - mwezi.lastIndex(of: neno)!}
+    //closures do not work, pERIOD!
+//}
+
+var semanaMi: () -> Void
+semanaMi = { () in print("dhumpa")}
+
+struct XayalaHanson {
+    var send: String
+    init() {
+        send = "July"
+    }
+    func howcomes() -> Int {
+        mwezi.firstIndex(of: "December")! - mwezi.lastIndex(of: send)!
+    }
+}
+
+var hebu = XayalaHanson()
+hebu.howcomes()
+hebu.send
+// initializing with init()
+
+//🧩 initializers in structures
+struct DecodingDates {
+    var months: String
+    var days: Int
+    init(months: String, days: Int) {
+        self.months = months
+        self.days = days
+    }
+    func checki() -> Int {
+        mwezi.firstIndex(of: "December")! - mwezi.lastIndex(of: months)!
+    }
+}
+
+var helloJames = DecodingDates(months: "July", days: 27) // now they have appeared
+helloJames.checki()
+//page 246
+//Thankl You Christ Jesus
+
+
+
 
