@@ -1811,6 +1811,271 @@ helloJames.checki()
 //page 246
 //Thankl You Christ Jesus
 
+// page 246
+
+struct SimpleMonth {
+    var month: String = "MarchSundayTuesdayMondayThursdayMayDecember"
+    var date: Int = 23
+    func computed() -> Int {
+        return month.count + date
+    }
+}
+
+var az = SimpleMonth(month: "December") // this way you will need to force it to come out
+az.month
+az.computed()
+//🥊 ( meaning that i have reached a punch line )
+
+// Type methods, you call them at the very begining with static and they acces each and every instance in the structure.
+// Instance is what is called in the structrue as values.
+
+struct Math {
+    static func factorial(of number: Int) -> Int {
+        (1...number).reduce(2, +) // has got to be in close range for it to work
+    }
+    static func aDDition(of number: inout Int) {
+        number += 10
+    }
+}
+Math.factorial(of: 20) //understood
+Math.aDDition(of: &a.date) // you can pack as many functions as possibel under the structure platform.
+
+extension Math {
+    static func PrimeFactorial(of number: Int) -> [Int] {
+        var remainingValues = number
+        var testfactor = 2
+        var primers: [Int] = []
+        while testfactor * testfactor <= remainingValues {
+            if remainingValues % testfactor == 0 {
+                primers.append(testfactor)
+                remainingValues /= testfactor
+            } else {
+                testfactor += 1
+            }
+        }
+        if remainingValues > 1 {
+            primers.append(remainingValues)
+        }
+        return primers
+    }
+}
+
+Math.PrimeFactorial(of: 908765)
+// extension allows you to add more methods in a structure even if you do not have the source code for it.
+// good hack and add on. + clean
+
+extension SimpleMonth {
+    mutating func Checkdate() { // when using mutating, never provide a return output type for the function
+        date += 12
+    }
+}
+
+var aa = SimpleMonth(month: "January", date: 98)
+aa.Checkdate() // never prints also. thats a thing.
+aa.computed()
+// you can also add extension for init
+
+
+// challenges 🍼
+struct Circle {
+    lazy var pi = { (23 * 45 / 87) }()
+    var radius: Int
+    var area: Int {
+        mutating get {
+            pi * radius
+        }
+    }
+}
+// Not sure if i have aced it but its something to such effect and whatnot.
+// Didset of willset cannot be provided with a getter.
+// So in such occasion you add the didset.
+var aaa = Circle(radius: 43)
+aaa.pi
+aaa.area
+
+//extension Circle
+
+// page 252 🚩
+struct aaab {
+    static var voltage: Int = 200
+    var light: String = "On"
+    var volts: Int {
+        didSet {
+            if volts > Self.voltage {
+                light = "Off"
+            }
+        }
+    }
+}
+
+var LightsTesting = aaab(volts: 234)
+LightsTesting.volts = 234
+LightsTesting.light // thats didset for you, you must apply the structure before it can be called to correct again by adding new value, so this is not your best option for real world application
+
+struct abaa {
+    static var voltage = 234
+    var lights: Bool = true
+    var volts: Int {
+        willSet {
+            if volts > Self.voltage {
+                lights.toggle()
+            }
+        }
+    }
+}
+
+var lightOnTesting = abaa(volts: 300)
+lightOnTesting.lights
+lightOnTesting.volts = 454
+lightOnTesting.lights
+// still wont work either. something is not right somewhere.
+
+struct aabb {
+    static var voltage = 890
+    var toyota: Int
+    var zebra: Int
+    var tenis: Int {
+        get {
+            var zack = 0
+            zack = toyota + zebra
+            return zack
+        }
+        set {
+            if newValue > 24 {
+                toyota = 34
+                zebra = 54
+            } else {
+                toyota = 100
+                zebra = 34
+            }
+        }
+    }
+}
+
+var TryingSettersGetters = aabb(toyota: 24, zebra: 89)
+TryingSettersGetters.tenis = 93
+TryingSettersGetters.zebra
+// this is a fine work 🌿
+
+// chapter 13 classes
+// structure is used to represent value, while classes are used to represent objects
+// class must have an initializeer init() if they are ever to give automatic parameter initials
+
+class aaabbb {
+    var firstname: String
+    var lastname: String
+    init(firstName: String, lastName: String) {
+        self.firstname = firstName
+        self.lastname = lastName
+    }
+    var fullname: String {
+        "\(firstname) \(lastname)"
+    }
+}
+var Majina = aaabbb(firstName: "Humphrey", lastName: "Hanson")
+Majina.fullname // thats class in a nutshell.
+
+// in swift an istance of a structure is an imutable value, while in class the instances are imutable
+// memory sharing antics
+
+var jina = Majina
+// check for memory with 3 equal strokes
+jina === Majina
+// weird code 🃏
+var imposters = (0...100).map { _ in
+  aaabbb(firstName: "John", lastName: "Appleseed")
+}
+
+// testing memory so i can understadn it.
+imposters.insert(Majina, at: Int.random(in: 1..<10))
+if let anotherChecking = imposters.firstIndex(where: {$0 === Majina}) {
+    imposters[anotherChecking].firstname = "Xayala"
+} // this is how you can use where clause. ( used the wrong type to index word )
+
+var checkininmajina = imposters.contains(where: {$0 === Majina})
+//🥊
+
+// 263 methods mutability
+struct Grade {
+    let letter: Character
+    let point: Int
+    let credit: Double
+}
+
+class student {
+    var firstName: String
+    var lastName: String
+    var grade: [Grade] = []
+    init(Firsname: String, lastName: String) {
+        self.lastName = lastName
+        self.firstName = Firsname
+    }
+    func recordGrade(_ grades: Grade) {
+        grade.append(grades)
+    }
+}
+
+let jane = student(Firsname: "Humphrey", lastName: "Hanson") //📌 ( could change a constant because it is a reference type of class variety )
+let history = Grade(letter: "B", point: 67, credit: 90.0)
+var math = Grade(letter:"C", point: 34, credit: 45.0)
+
+jane.recordGrade(history)
+jane.recordGrade(math)
+
+var credit = 0.0
+extension student {
+    func rcordGrade(_ grades: Grade) {
+        grade.append(grades)
+        credit += grades.credit
+    }
+}
+jane.rcordGrade(math)
+credit // clearing sharing, so whats to it.
+math = Grade(letter:"C", point: 34, credit: 4)
+math.credit
+jane.rcordGrade(math)
+credit
+
+/// extensions must not contain initialized values.
+extension student {
+    var null: String {
+        "\(firstName) \(lastName)"
+    }
+}
+
+// challange page 269/555
+
+class users {
+    var first :String
+    var last: String
+    init(name1: String, name2: String) {
+        self.first = name1
+        self.last = name2
+    }
+}
+
+var cleint1 = users(name1: "Hump", name2: "hrey")
+var clien2 = users(name1: "Han", name2: "son")
+
+class list {
+    var explantion: String
+    var releseYear: Int
+    var name: users
+    init(explain: String, names: users, release: Int) {
+        self.explantion = explain
+        self.name = names
+        self.releseYear = release
+    }
+    func fullnameUndInfo() -> String {
+        var sum = name.first + name.last
+        return " \(sum) \n said the following on a movie release in \(releseYear) \n \(explantion)"
+    }
+}
+
+var list1 = list(explain: "it was an ok movie, it was honestly whatever", names: clien2, release: 2022)
+list1.releseYear = 2009
+print(list1.fullnameUndInfo())
+// just got to know which one to use and what time. later on down the line i might understand the memory thing much better, but for now, i think this swell.
 
 
 
