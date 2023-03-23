@@ -2077,5 +2077,188 @@ list1.releseYear = 2009
 print(list1.fullnameUndInfo())
 // just got to know which one to use and what time. later on down the line i might understand the memory thing much better, but for now, i think this swell.
 
+// page 272 advanced classes🌿
+struct Grade {
+    var letter: Character
+    var points: Double
+    var credits: Double
+}
+
+class Person {
+    var firstName: String
+    var lastName: String
+    
+    init(first: String, last:String) {
+        self.lastName = last
+        self.firstName = first
+    }
+    deinit {
+        print("\(firstName) \(lastName) is being removed from memory!")
+    }
+}
+
+class student {
+    var firstname: String
+    var lastname: String
+    var grades: [Grade] = []
+    
+    init(first: String, last:String) {
+        self.firstname = first
+        self.lastname = last
+    }
+    
+    func recordGrade(_ grade: Grade) {
+        grades.append(grade)
+    }
+}
+//🚩 there is redundancy in the code, both student and person are the same people, basically. like the same data.
+// enter advances classes
+
+class Student: Person {
+    var grades: [Grade] = []
+    
+    func recordGrade(_ grade: Grade) {
+        grades.append(grade)
+    }
+} //🦅
+
+let jane = Student(first: "Hana", last: "Montana")
+let peter = Person(first: "Miley", last: "Cyrus")
+let math = Grade(letter: "B", points: 89, credits: 3)
+let history = Grade(letter: "A", points: 90, credits: 5) // will only be within Student but not copied to person
+
+jane.recordGrade(history)
+jane.recordGrade(math)
+jane.grades
+// a class inheriting from another is call a subclass while a class to which inheritence is coming from is called a superclass.
+// there is not limit in subclassing, meaning you can inherit as plenty of clases as possible, however there is a limit to inheriting one class at a time.
+// use the word supper to access values from the provider of inheritence in class
+
+// the chain of sunbclass is called heirarchy. walking from the last to the very first.
+
+// polymorphism
+
+
+//✨
+class BandManager: Student {
+    var minimumPracticeTime = 2
+}
+
+class ObeoPlayer: BandManager {
+    override var minimumPracticeTime: Int {
+        get {
+            super.minimumPracticeTime * 2
+        }
+        set {
+            super.minimumPracticeTime = newValue / 2
+        }
+    }
+}
+//runtime heirarchy
+var hallMonitor = Student(first: "John", last: "Pendix")
+let oboePlayer = ObeoPlayer(first: "Von", last: "Chachama")
+
+func phonebookName(_ person: Person) -> String {
+    "\(person.lastName), \(person.firstName)"
+}
+phonebookName(peter)
+phonebookName(oboePlayer)
+
+hallMonitor = oboePlayer
+(hallMonitor as? BandManager)?.minimumPracticeTime
+//(hallMonitor as BandManager)?.minimumPracticeTime
+hallMonitor.lastName
+
+// inheritence, methods, and overides
+
+class studnetAthlete: Student {
+    var failedClasses: [Grade] = []
+    
+    // basically editing our code so as to fit in new conditions as when students fail, do this and that.
+    override func recordGrade(_ grade: Grade) {
+        super.recordGrade(grade) // calling the old function
+        
+        if grade.letter == "F" {
+            failedClasses.append(grade)
+        }
+    }
+    var isElegible: Bool {
+        failedClasses.count < 3
+    }
+}
+// not to worry the compiler give you all these suggestions too.
+
+var letseeWhatimlookingatNow = studnetAthlete(first: "jegme", last: "jogmo")
+letseeWhatimlookingatNow.recordGrade(math)
+letseeWhatimlookingatNow.isElegible
+
+
+// swift however, has a way of stopping classes from ever taking shape. by the use of finalclass.
+
+struct thiswontHaveAsub {
+    var jina: String
+    var date: Int
+    var ok: Bool
+    
+}
+
+class studentAthlete: Student {
+    var sports: [String]
+    
+    init(sport: [String], last: String, first: String) {
+        self.sports = sport
+        super.init(first: last, last: first)
+    }
+}
+// so basically you can initiaze new values with the help of init() only as long as you can complete the whole class with an inclusive super.init()
+
+class baseball {
+    var game: Int
+    var won: Bool
+    var points: Int
+    
+    init(pon: Int, wins: Bool, gem: Int) {
+        self.game = gem
+        self.points = pon
+        self.won = wins
+    }
+    
+    init(transfer: baseball) {
+        self.won = transfer.won
+        self.points = transfer.points
+        self.game = transfer.game
+    }
+}
+
+var loook = baseball(pon: 23, wins: false, gem: 5)
+var loilk = baseball(transfer: loook)
+loilk === loook
+
+// what am i doing honestly.
+
+class button {
+    func press(){}
+}
+
+class pressbutton: button {
+    var text: String
+    
+    init(text: String) {
+        self.text = text
+    }
+}
+
+class image {}
+
+class buttonImage: button {
+    var image: image
+    
+    init(image: image) {
+        self.image = image
+    }
+}
+// and this can go on and on and on and on.
+// thank you Christ Jesus.
+
 
 
