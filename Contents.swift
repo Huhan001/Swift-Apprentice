@@ -2262,3 +2262,760 @@ class buttonImage: button {
 
 
 
+// begining with enumarations: So help me GOD in Jesus Christ name.
+// page 295/555
+// chapter 15
+
+
+// even when not put in one line, they do not hold (,) a comma either
+
+//enum month {
+//    case january
+//    case febuary
+ //   case march
+//    case april
+//    case may
+//    case june
+//    case july
+//    case august
+//    case september
+//    case october
+//    case november
+//    case december
+// } // you can collapse the values by using comma seperated naming convention
+
+// point of notice is that inum strings to dot have the normal string denotion of ""
+enum Month: Int {
+    case january = 1, febuary, march, april, may, june, july, august, september, october, november, december
+}
+
+func SeasonChecking(dayintime: Month) -> String {
+    switch dayintime {
+    case .august, .november, .december, .april:
+        return "its looking green"
+    case .march:
+        return "its whatever"
+    default:
+        return "wooooh!"
+    }
+}
+var testing = Month.march
+testing = .december
+SeasonChecking(dayintime: testing)
+
+// closure, from now on i shall familiarize myself every often wiht closures and normal function so i do not forget them.
+var timelyBehaviur = { (forwhat: Month) -> String in
+    switch forwhat {
+    case .august, .november, .december, .april:
+        return "its looking green"
+    case .march:
+        return "its whatever"
+    default:
+        return "wooooh!"
+    }
+}
+timelyBehaviur(testing)
+var dany = {(23 * 45)}() // another type of variable i fancy
+// you do not neccesarily have to exhauset the switfh statement, if you use all of the values.
+// enum are better than strings. the yavoid typos, missing letter and mispletting.
+
+testing = .january // compiler will raise alarm if the enum is violated.
+
+enum childrenNames: Int {
+    case jona = 1, jane = 2, isack = 3, vim = 4, zack = 5,
+    edward = 6, jones = 7
+}
+var naming = childrenNames.edward
+enum childrenNmaing: Int {
+    case zack = 1, simba, kora, pumba, mofasa, timon, ron
+}
+
+var whuch = childrenNames.jane
+var whuchcHecking = {(look: childrenNames) -> String in
+    return "This is the \(look.rawValue) accordign to the calender"
+}
+whuchcHecking(naming)
+
+var whatWhaat: (childrenNames) -> Int //🥊
+whatWhaat = {(look: childrenNames) in
+    look.rawValue - look.rawValue
+}
+whatWhaat(naming)
+
+var mda = Month(rawValue: 4) // this is a failiable initializer, meaning it would go nil if it fails to match the iput suggested. therefore it is an option
+func monthsUnitsWinterBreak(from here: Month) -> Int {
+    Month.december.rawValue - here.rawValue
+}
+
+monthsUnitsWinterBreak(from: mda!) // it is an optional because we used the raw value initializer and that is a value that could be missing, however we were able to have it nonetheless.
+//  you can choose to unwrap the option during initialization or during the function running. either is fine.
+
+// trying computed enumaration
+extension Month {
+    static func monthsUnitsWinterBreak(from here: Month) -> Int {
+        Month.december.rawValue - here.rawValue
+    }
+}
+
+var tryingComputedProperty = Month.monthsUnitsWinterBreak(from: mda!)
+// you can make it a computer property, just like the structure and classes.
+// and i used extension.
+var anothertryial = monthsUnitsWinterBreak(from: .january) // Much better id say
+
+// enum with strings...
+enum icon: String {
+    case music
+    case wheather
+    case sports
+    
+    var filname: String { // we named it right here
+        "\(rawValue).png" // so it comes off from over here.
+    }
+}
+
+let con = icon.sports
+con.filname
+
+var von = icon.wheather
+von.filname // it is assigned a value with get
+
+
+enum coins: Int {
+    case penny = 1
+    case nickle = 5
+    case dime = 10
+    case quater = 25
+    
+    func withdrawAll() -> String {
+        return "the value is \(rawValue)"
+    }
+}
+
+let coin = coins.penny
+coin.rawValue
+coin.withdrawAll()
+
+// another way to get value behind a matter, this is refered to as rawvalue in enum.
+
+// assosiated values
+//1. Each enumeration case has zero or more associated values.
+//2. The associated values for each enumeration case have their own data type.
+//3. You can define associated values with label names as you would for named function parameters.
+
+var balance: Int = 1000
+//func withdrawal(when: Int) {
+//   balance -= when
+//}
+
+//withdrawal(when: 892) // sorta works
+// enter enum associated values
+
+enum withdrawals {
+    case successful(newbalnce: Int)
+    case notsucessful(message: String)
+}
+
+
+func withdrawing(num: Int) -> withdrawals {
+    if num > balance {
+        return .notsucessful(message: "you do not have money")
+    } else {
+        let hey = balance - num
+        return .successful(newbalnce: hey)
+    }
+}
+
+var porter = withdrawing(num: 789) // so enum associated values are sorta like funcitons but not all the wa ydefined, but empy funciton shells.
+print(porter) // makes sense.
+
+enum toilet {
+    case yes
+    case no
+    case flashed(water: String)
+    case didntFlash(noWater: String)
+    
+    static func waterways(jum: Bool) -> toilet {
+        if jum == false {
+            return .didntFlash(noWater: "please flash your toilet")
+        } else {
+            return .flashed(water: "yes the toilet was flashed")
+        }
+    }
+}
+
+var chooni = toilet.waterways(jum: true)
+// going a bit further with enums
+
+indirect enum bedroom { // cant have both rawvalue and associated value
+    case room11
+    case room12
+    case room14
+    case available(forBooking: Int)
+    case notAvailable(forbooking: String)
+    // functions to check rooms
+    static func rooms(which: Int) -> bedroom {
+        switch which {
+        case 1, 2:
+            return .available(forBooking: 11)
+            //print("the available room is: \(room11)")
+        case 3:
+            return .available(forBooking: 14)
+        case 4...5:
+            return .notAvailable(forbooking: "we do not have that many number of rooms")
+        default:
+            return .available(forBooking: 12)
+        }
+    
+    }
+}
+var hotelpicking = bedroom.rooms(which: 1)
+hotelpicking = .rooms(which: 4)
+// page 303
+
+// enumarations for internet servers
+
+enum HTTPMethod {
+    case get
+    case post(body: String)
+}
+
+let request = HTTPMethod.post(body: "Here please")
+
+// pattern matching error handling with guard. 👀
+guard case .post(let body) = request else {
+    fatalError("No messsage was put out")
+    //print(body)
+}
+
+
+// enumaration as a state machine
+// an enum is considered a state machine because it can only ever be one single enum at a time and never any more than that.
+enum trafficLights {
+    case red, green, yello, purple
+}
+let reaffic = trafficLights.green
+
+enum houselights {
+    case on, off
+}
+var lights = houselights.off
+
+// iterating throuhg cases of enum
+enum pets: CaseIterable { // You must notify that it is iterable in the begining by inputting, case interables at the begining.
+    case dog, rat, cat, lion, goat, cow, zebra, hyena
+}
+
+for pet in pets.allCases { // you also need to specifiy all cases or other options if you wish to loop throuhg
+    print(pet)
+}
+
+// enumaration without case
+struct math {
+    static func checking(foom iopn: Int) -> Int {
+        (1...iopn).reduce(2, *)
+    }
+    static var e:Float = {(2.7183)}() // got to be filled
+}
+var jugger = math.checking(foom: 4)
+
+// the best way to create good properties for calculation, or properties that must return something is to use an enum instead of an structure
+
+enum stepback {
+    static func twosteps() -> String {
+        return "jump back two steps"
+    }
+    static var e = 4 // static allows for a number to be access from outside a structure or enum or class.
+}
+
+var calve = stepback.twosteps() // this is the best way to avoid any error further down the line.
+
+// enumarations without a case are ofen refered to as unihabited types of bottom types
+import Foundation
+let nestegg = 2500 * pow(math.e, 0.7 * 20) // didn't go as planned.
+
+
+//optionals are enumartors apparently
+var age: Int?
+age = 12
+age = nil
+
+switch age {
+case .none:
+    print("blah")
+case .some(let value):
+    print("\(value)")
+}
+
+// look forward ot generics and write functions that have underlying tech of the bizzare nature.
+
+// thank you Christ Jesus.
+// page 308
+
+enum sarafu: Int {
+    case penny = 1
+    case nickel = 5
+    case dime = 10
+    case quater = 25
+}
+
+let sarafuPurse: [sarafu] = [.penny, .dime, .nickel, .quater]
+func chekcAndAdd(val: [sarafu]) -> Int {
+    var tot = 0
+    for nah in val{
+        tot += nah.rawValue
+    }
+    return tot
+}
+
+chekcAndAdd(val: sarafuPurse) // done 1 🌿
+
+enum mdaWauhakika: Int {
+    case january = 1, february, march, april, may, june, july,
+         august, september, october, november, december
+    static func checkforsummer(when: mdaWauhakika) -> Int {
+        var tot = 0
+       tot = Self.july.rawValue - when.rawValue
+        print("Months till summer \(tot)")
+        return tot
+    }
+}
+
+//let vpoooo = mdaWauhakika.checkforsummer(<#T##self: mdaWauhakika##mdaWauhakika#>) this occurs when i do not use static on factions. then its an endless loop of error
+let oooop = mdaWauhakika.checkforsummer(when: .april) // good, perfect enum execution.
+
+//challage number 3
+enum direction {
+    case west
+    case east
+    case south
+    case north
+}
+
+var gameMovement: [direction] = [.east, .north, .south, .west, .south, .west, .west, .south, .north, .east, .north, .north, .south, .south, .east, .east, .north, .east, .west, .west, .west, .south]
+
+var location = (x: 0,y: 0)
+for move in gameMovement {
+    //var (x, y) = (0,0)
+    switch move {
+    case .west:
+        location.x += 1
+    case .east:
+        location.x -= 1
+    case .north:
+        location.y += 1
+    case .south:
+        location.y -= 1
+    }
+}
+print("The players position is \(location)")
+// completed.
+
+// now turn it ot a proper funciton
+
+// chapter 16 protocals.
+// page 311.
+
+//short break, and my battery is bleading like nobodys business. why.
+
+protocol Vehicle {
+    func accerlerate()
+    func stop()
+}
+
+class unicerCyle: Vehicle {
+    var peddling = false
+    
+    func accerlerate() {
+        peddling = true
+    }
+    
+   func stop() {
+        peddling = false
+    }
+}
+
+// so protocal is like a blue print, and here we have simple conformed to the protocal by updating all its requirements.
+
+enum direction {
+    case left
+    case right
+}
+
+protocol directionaVehicle {
+    func accelerate()
+    func stop()
+    func turn(_ direction: direction)
+    func description() -> String
+    
+    // no implementation,
+    // no parameters
+    // protocals are used as guidance for coding implementation
+    func turn() // this is added as an optional mechanism in direction
+    // a protocal can also have proterties declare within
+    var weight: Int { get }
+    var name: String { get set }
+    
+    // you define but do not include any implementation for the properties.
+    // not like the methods.
+    
+    //While protocols themselves can’t be initialized, they can declare initializers that conforming types should have:
+}
+// more on this on protocal oriented programing.
+// a protocal can also have proterties declare within
+
+protocol Account {
+    var value: Double { get }
+    init(initialAmount: Double)
+    init?(tranferAccount: Account)
+}
+
+class BitcoinaAccount: Account {
+    var value: Double
+    
+    required init(initialAmount: Double) {
+        value = initialAmount
+    }
+    // using required because these must conform to the protocal init mechanism
+    
+    required init?(tranferAccount: Account) {
+        guard tranferAccount.value > 0.0 else { // fancy unwraping guard statement
+            return nil
+        }
+        value = tranferAccount.value
+    }
+}
+
+
+//🚩
+var tulia: Int? = 10
+print(tulia as Any)
+
+guard let tulia = tulia  else {  // this is how you unwrap with a guard statement. or simple use the exclamatin mark which ever is good for you. but this is good. and safe
+    fatalError("coul not unwrap")
+}
+
+print(tulia)
+//📩
+
+
+// back to protocals.
+var accountType: Account.Type = BitcoinaAccount.self // i am passing bitcoint self to this ( will find out more later )
+let account = accountType.init(initialAmount: 34.5) // initialized
+let transferaccount = accountType.init(tranferAccount: account)
+print(transferaccount!) // dont see how this works in the real world
+
+
+var direct1 = BitcoinaAccount.init(initialAmount: 45.9)
+var seconddirect = BitcoinaAccount.init(tranferAccount: direct1)!
+
+print(direct1)
+
+// Protocals that inherit from other protocals.
+protocol vans {
+    func laces() -> Bool
+    func sols()
+    
+    var numberOfShoes: Int { get }
+    var shoesSold: Int { get }
+   // init(people: Int)
+    
+}
+
+protocol boots: vans {
+    var numberOfwheeel: Int { get }
+    var wheels: Double { get set }
+}
+// protocalls are built to be adopted to class, enum and struct
+
+class shoeStore: boots {
+    func laces() -> Bool {
+        if numberOfwheeel > 2 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func sols() {
+        print("i got \(numberOfwheeel), \(numberOfShoes), \(shoesSold) and \(wheels), you name it")
+    }
+    
+    
+    var shoesSold: Int
+    var numberOfShoes: Int
+    var numberOfwheeel: Int
+    var wheels: Double
+    
+    init(one: Int, two: Int, there: Double, pipsp: Int) {
+        self.numberOfwheeel = one
+        self.numberOfShoes = two
+        self.wheels = there
+        self.shoesSold = pipsp
+        
+    }
+}
+
+var badbusiness = shoeStore(one: 9, two: 2, there: 4.5, pipsp: 4)
+badbusiness.sols()
+badbusiness.laces()
+// i get what protocal is all about. best not play yourself if you knwo what i mean, the same as an enum, it can never have both associated values and rawvalue, same applies to protocal with init.
+
+// they can be stacked together and so on.
+
+protocol area {
+    var locale: Double { get }
+    var place: Int { get }
+}
+
+struct implemented: area {
+    var sum: Int
+    var time: Double
+    var locale: Double {
+        get {
+            time * 10.0
+        }
+    }
+    
+    var place: Int {
+        get {
+            sum + 4
+        }
+    }
+}
+
+var tryiugigjgng = implemented(sum: 23, time: 4.3)
+tryiugigjgng.locale
+print(tryiugigjgng.sum)
+
+// protocal i repeat again is only a blue print, to use whenever necesary.
+
+protocol Vehiclee {
+    var peddling: Bool { get }
+    var brakesApplied : Bool { get }
+    
+    func accelerate()
+    func stop()
+}
+
+class Bike: Vehiclee {
+  var peddling = false
+  var brakesApplied = false
+  func accelerate() {
+    peddling = true
+    brakesApplied = false
+  }
+  func stop() {
+    peddling = false
+    brakesApplied = true
+  }
+}
+// so not everyday should a class have an init and not everyday does a switch need to have a defualt. the class here didnt have it because it conforms to the protocal and the and therefore the variables were inputed already
+
+class uwas {
+    var ty = 20
+    var sem = 89
+    // the reason is because we have alreayd bestowed value to them, thats why
+}
+//Defining a protocol guarantees any type that conforms to the protocol will have all the members you’ve defined in the protocol.
+
+
+protocol qaz {
+    associatedtype mark // this is when you do not know the type you will use down the road when building.
+    var tom: mark { get }
+}
+
+class andrew {
+    var tom: Int = 89 // easy and better do it like this.
+    
+    init(vaz: Int) {
+        self.tom = vaz
+    }
+}
+
+let smack = andrew.init(vaz: 90)
+
+// protocal composition.
+protocol pole {
+    func stop()
+    //func move()
+}
+
+protocol james {
+    var sambsa: Int { get }
+    var mandazi: Int { get }
+    
+    func tellme() -> String
+}
+
+
+class combined: james, pole {
+    var sambsa: Int
+    var mandazi: Int
+    
+    init(pis: Int, som: Int) {
+        self.mandazi = pis
+        self.sambsa = som
+    }
+    
+    func stop() {
+        print("may boy")
+    }
+    
+    func tellme() -> String {
+        return " i told you so"
+    }
+    
+}
+
+
+var zebedayo = combined(pis: 34, som: 55)
+
+// look
+func allinAne(puting: pole & james) {
+    puting.stop()
+    print("im trying here \(puting.tellme())")
+}
+
+var topld: () = allinAne(puting: zebedayo)
+// another day in protocals and now doing extension protocals
+// using extension you can edit a protocal that isn't yours
+
+protocol savanah {
+    associatedtype saleh
+    var sabuni: saleh { get }
+}
+
+extension String: savanah {
+    var sabuni: String {
+        "heyip"
+    } // extension must not contain value or stored property
+}
+var moanzi = "testing"
+moanzi.sabuni
+
+// you can also perform extensions on protocal so as to add further more confomit if you must.
+
+protocol selop {
+    func sheko()
+    func teko()
+}
+
+protocol youpi {
+    var tanesc: String { get }
+    var mawenxe: String { get }
+}
+
+struct mawezni: selop {
+    func sheko() {
+        print("twendi")
+    }
+    func teko() {
+        print("tupean")
+    }
+}
+
+extension mawezni: youpi {
+    var tanesc: String {
+        get {
+            "dex"
+        }
+    }
+    var mawenxe: String {
+        get {
+            "drew"
+        }
+    }
+}
+
+var lookintoshti = mawezni()
+lookintoshti.sheko()
+lookintoshti.teko()
+lookintoshti.tanesc
+
+protocol lookij {
+    var wewe: String { get }
+}
+
+struct huy: lookij {
+    var wewe: String = "uin" // this is because i have get set set as protocal
+}
+
+// trying out a nexample
+
+protocol Named {
+    var name: String { get set }
+}
+
+class className: Named {
+    var name: String
+    init(you: String) {
+        self.name = you
+    }
+}
+
+struct structyName: Named {
+    var name: String
+}
+
+var inputting = className(you: "how are you")
+inputting.name
+var sem = inputting
+sem.name = "james"
+
+inputting.name
+
+// now testing for structures
+
+var alwaysned = structyName(name: "how are we")
+alwaysned.name
+var somesn = alwaysned
+somesn.name = "jom"
+
+alwaysned.name
+// understood the mechanism of structure and class memory management ways
+
+// designing protocals for classes only
+/// hashables
+///
+class Student {
+    let email: String
+    let firstName: String
+    let lastName: String
+    init(email: String, firstName: String, lastName: String) {
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
+} }
+
+extension Student: Hashable {
+    static func ==(lhs: Student, rhs: Student) -> Bool { // alreayd comes with the mac
+        lhs.email == rhs.email &&
+        lhs.firstName == rhs.firstName &&
+        lhs.lastName == rhs.lastName
+}
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(email)
+        hasher.combine(firstName)
+        hasher.combine(lastName)
+} }
+
+
+extension Student: CustomStringConvertible {  // alreayd comes with the mac
+    var description: String {
+        "\(firstName), \(lastName)"
+    }
+}
+
+var sebastianOne = Student(email: "onehulio@gmail.com", firstName: "humpiulum", lastName: "lopio")
+sebastianOne.description
+
+// 📌 at the end we have custumstringconvertable, equitable, identifiable.
+// all theses are mechanism to working with swift.
+
+let john = Student(email: "johnny.appleseed@apple.com",
+                   firstName: "Johnny",
+                   lastName: "Appleseed")
+let lockerMap = [john: "14B"]
+john.email
+// thank you Christ jesus
