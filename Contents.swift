@@ -3019,3 +3019,86 @@ let john = Student(email: "johnny.appleseed@apple.com",
 let lockerMap = [john: "14B"]
 john.email
 // thank you Christ jesus
+
+
+// generics
+// Christ be with me Please.
+
+enum petkind {
+    case dog, cat, bird
+}
+
+struct keeperKind {
+    var keeperOf: petkind
+    //var watcherOF: petkind = .cat
+}
+
+let catKepper = keeperKind(keeperOf: .cat)
+let dogKeeper = keeperKind.init(keeperOf: .dog)
+let birdKepper = keeperKind(keeperOf: .bird) //easy and seemless addition type one value to a particular type
+
+enum EnumKeeperKind {
+  case catKeeper
+  case dogKeeper
+}
+
+// varytype instead of varying values for a type.
+
+class cat {}
+class dog {}
+
+// now the corresponding types of keepers
+
+class keeperForCats {}
+class keeperForDogs {}
+
+// generics solve automatic type generation. whats that, lets find out.
+// page 335 / 555
+
+// defining generic type. Generics provide a mechanism for using one set of types to define a new set of types.
+
+
+class Cat {
+  var name: String
+  init(name: String) {
+    self.name = name
+  }
+}
+class Dog {
+  var name: String
+  init(name: String) {
+    self.name = name
+  }
+}
+
+class kepper<Animal> {
+    var name: String
+    var morningCare: Animal
+    var afternoonCare: Animal
+    
+    init(name: String, morning: Animal, after: Animal){
+        self.name = name
+        self.afternoonCare = after
+        self.morningCare = morning
+    }
+}
+
+var jason = kepper(name: "one", morning: Dog(name: "one"), after: Dog(name: "two")) // looks to me that this has got to be one type or something
+// it must be one type.
+// getting there [ Because you used instances of Cat as the values for morningCare and afternoonCare, Swift knows the type of jason should be Keeper<Cat>. ]
+
+// contraining generics
+
+protocol beva {
+    var name: String { get }
+}
+
+extension Cat: beva {}
+extension Dog: beva {}
+
+class keeping<Action: beva> {
+}
+// badly written, generics page 343.
+
+
+
