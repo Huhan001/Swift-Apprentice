@@ -3102,3 +3102,267 @@ class keeping<Action: beva> {
 
 
 
+import Foundation
+
+// chapter 18
+// access control, code organization and testing.
+
+// imagine creating a banking software.
+
+protocol Account {
+    associatedtype Currency
+    
+    var balance: Currency { get }
+    func deposit(amount: Currency)
+    func wihtdraw(amount: Currency)
+}
+
+// now adding a conforming type with the code.
+
+typealias Dollars = Double
+
+class basicAccount: Account {
+    
+    private(set) var balance: Dollars = 0.0
+    
+    func deposit(amount: Dollars) {
+        balance += amount
+    }
+    
+    func wihtdraw(amount: Dollars) {
+        if amount <= balance {
+            balance -= amount
+        } else {
+            balance = 0
+        }
+    }
+    
+    //init(balance: Dollars){
+      //  self.balance = balance
+    //}
+}
+// acording to the book the balance is a read only while it should have been a read and write material.
+
+var jimsAccount = basicAccount()
+jimsAccount.wihtdraw(amount: 400)
+jimsAccount.balance
+jimsAccount.deposit(amount: 45.3)
+// jimsAccount.balance = 9000 // balance setter is unexxesible 👀
+
+// without access control it was easy to add value to the code which can cause issues if any user can be abel to do so.
+
+// introducing access control. ( not a security feauture, but communicates intent.
+
+// add private(set) to the variable declaration.
+
+//private(set) var balance = basicAccount(balance: 1000) // must add it in the definition of basic account.
+
+// after adding the private set on line 20, refer to line 44 for updated console update.
+
+// there are many forms of private access to code.
+// private: Accessible only to the defining type, all nested types and extensions on that type within the same source file.
+//fileprivate: Accessible from anywhere within the source file in which it’s defined.
+//internal: Accessible from anywhere within the module in which it’s defined. This level is the default access level. If you don’t write anything, this is what you get.
+
+// To demonstrate, continue with your banking library by extending the behavior of BasicAccount to make a CheckingAccount:
+class CheckingAccount: basicAccount {
+    private let accountnumber = UUID().uuidString
+    
+    class Check { //💳
+        let account: String
+        let amount: Dollars
+        private(set) var cashed = false
+        
+        func cash() {
+            cashed = true
+        }
+        
+        init(amount: Dollars, from account: CheckingAccount){
+            self.amount = amount
+            self.account = account.accountnumber // accesible by the root class.
+            //super.init(basicAccount(balance: amount)) cannot call upon superint in a root class.
+        }
+    }
+    
+    func writeCheck(amount: Dollars) -> Check? {
+        guard balance > amount else {
+            return nil
+        }
+        let check = Check(amount: amount, from: self)
+        wihtdraw(amount: check.amount)
+        return check
+    }
+    
+    func deposit(_ check: Check) {
+        guard !check.cashed else {
+            return
+        }
+        
+        deposit(amount: check.amount)
+        check.cash()
+    }
+}
+
+// this will create a check, and deposit which is read and write. and will not deposit a check that has already been depositied.
+
+// lowkey understood the code.
+
+let jochchecking = CheckingAccount() // inital balance
+jochchecking.deposit(amount: 2000.0) // deposited amount
+
+let CHECK = jochchecking.writeCheck(amount: 800.0) // wrote a check
+
+let janeAccount = CheckingAccount()
+janeAccount.deposit(CHECK!) // because i had to unwrap it.
+janeAccount.balance
+// fine implementation.
+
+// used class and something new called root classes. gotta look this up on youtube.
+
+// page 353. continue laler.
+//View\Navigators\Show Project Navigator.
+import Foundation
+
+// file private. ventoring into another form of private.
+
+
+let jochchecking = CheckingAccount() // inital balance
+jochchecking.deposit(amount: 2000.0) // deposited amount
+
+let CHECK = jochchecking.writeCheck(amount: 800.0) // wrote a check
+
+let janeAccount = CheckingAccount()
+janeAccount.deposit(CHECK!) // because i had to unwrap it.
+janeAccount.description
+janeAccount.balance
+
+class savingsAccount: basicAccount { // cannot inherit from a none open class.
+    
+    // so for the main compiler, you cannot inherit a non open class. althought it can be inherited by its other modules.
+    // the compiler will request that it becomes open instead
+    
+    var interestRate: Dollars
+    private let pin: Int // for securiyt reason
+    
+    @available(*, deprecated, message: "use pin")
+    init(interestRate: Dollars, num: Int) {
+        self.interestRate = interestRate
+        self.pin = num // security reason so people do not abuse the interest rate caller
+    }
+    
+    //@available(*, deprecated) adds warnings even though the code finaly compiles.
+    // The asterisk in the parameters denotes which platforms are affected by this deprecation. It accepts the values *, iOS, iOSMac, tvOS or watchOS
+    
+   @available(*, deprecated, message: "Use processInterest(pin:)instead")
+    func processInterest(pin:Int) {
+        if pin == self.pin {
+            let interest = balance * interestRate
+            deposit(amount: interest)
+        }
+    }
+}
+
+// page 360
+var adams = savingsAccount(interestRate: 0.4, num: 077)
+adams.deposit(amount: 300)
+adams.processInterest(pin: 077)
+adams.balance
+adams.processInterest(pin: 077)
+adams.balance
+
+// available
+
+
+// struct made public and can now be called to the compiler for running.
+// lets add a twist to this by ceating a sub struct.
+var student001 = personFile(name: "Humphrey", last: "Hanson")
+
+student001.fullName()
+
+struct anotherStudent {
+    var student: personFile
+    var age: Int
+    
+    func getInfo() {
+        print("students name: \(student), age \(age)")
+    }
+}
+
+var conduting = anotherStudent(student: student001, age: 29)
+conduting.getInfo()
+// so open if for classes or subclasse, with structs a mere public can do it all.
+
+class experienceGate: classyPerson {
+    var yearsWorking: Int
+    
+    init(one: String, two: String, three: String, time: Int) {
+        self.yearsWorking = time
+        super.init(one: one, two: two, three: three)
+    }
+    
+    func howMuch () -> Int {
+        return yearsWorking * 2 / 5
+    }
+}
+
+var checkingIout = experienceGate(one: "Gary", two: "Payton", three: "Doctor", time: 10)
+checkingIout.howMuch()
+
+// the rest being hidden.
+// thats open and public for you.
+// private as well.
+// file private.
+
+// extensions by behaviour
+// makes it easy to add or remove restriction at little to no cost or regret to the code.
+
+
+//apaque return types
+// this is an API essentially.
+
+
+func createAccount() -> any Account {
+    CheckingAccount() // more on this on advanced protocol and generics.
+}// chapter 28.
+
+
+
+// testing, writing unit tests.
+// to write unittest you first need to import xctest
+
+import XCTest
+
+class bankingTest: XCTestCase {
+    // its XCTestCase
+    // Fast: Tests should run quickly.
+    // Independent/Isolated: Tests should not share state.
+    // Repeatable: You should obtain the same results every time you run a test.
+    // Self-validating: Tests should be fully automated, and the output should be either “pass” or “fail”.
+    // Timely: Ideally, write tests before writing the code they test (Test-Driven Development).
+    // you need to create a test class that is a subclass of the imported XCTest
+    //func testSomething() {}
+    
+    func testNewAccount(){
+        let checking = CheckingAccount()
+        XCTAssertEqual(checking.balance, 0)
+    }// checks if all balances are zero
+    
+    func testCheckoverbudgertFails() {
+        let check = CheckingAccount()
+        let chesk = check.writeCheck(amount: 100)
+        XCTAssertNil(chesk)
+        // checks if the balance starts with zero and doesnt allow withdrawing.
+    }
+    
+    func testnewAPI() {
+        guard #available(iOS 14, *) else {
+            XCTFail("its whatever")
+            return
+        }
+    }
+}
+
+bankingTest.defaultTestSuite.run() // thats how you run a test. this is an intro
+
+// available has two types.
+// available for depricates and available for checking ios type tests
