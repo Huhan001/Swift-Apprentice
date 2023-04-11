@@ -3366,3 +3366,195 @@ bankingTest.defaultTestSuite.run() // thats how you run a test. this is an intro
 
 // available has two types.
 // available for depricates and available for checking ios type tests
+// chapter 19
+// custom operators, subscripts & keypaths
+
+// binary operands
+infix operator *+
+
+func *+(base: Int, power: Int) -> Int {
+  precondition(power >= 2)
+  var result = base
+  for _ in 2...power {
+    result *= base
+  }
+  return result
+}
+
+var jobs = 9 *+ 4
+var toms = 34
+// var zinab = jobs ** toms didnt work as intended.
+// but i am getting somewhere, some how you must start by declaring the infix operator then go ahaead and use it.
+
+infix operator *==
+
+func *==(tome: Int, tim:Int) -> String {
+    guard tim > tome else {
+        return "not happening"
+    }
+    return "yes sir"
+}
+
+var sema = 4 *== 3
+// works now.
+// let me test out a generic
+
+func gen<T: Equatable>(jone: T, zeli: T) -> String { // doesnt work because compiler would not guess what the values are to test them. hence the == would not work.
+    // generics is a fine topic to looks into
+    guard zeli ==  jone else {
+        return " never"
+    }
+    return "it happened"
+}
+// testing
+gen(jone: 8, zeli: 9)
+
+
+// whenever you creaet your custom operators or equitable and use the, in a line, swift wont know what to do with them unless you make put them in brackets or define whether the calculation go from left to right or before and after. page 375
+
+// use precedence group when you define the operand 📩
+precedencegroup ExponentiationPrecedence {
+    associativity: right
+    higherThan: MultiplicationPrecedence
+}
+
+infix operator ++: ExponentiationPrecedence
+func ++(base: Int, sim: Int) -> Int{
+    var xome = sim
+    precondition(5 >= base)
+    for _ in 1...base {
+        xome += base
+    }
+    return xome
+}
+
+2 * 4 ++ 8 * 5
+
+// subscripts
+class person {
+    let name: String
+    let age: Int
+    
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+}
+
+var soop = person(name: "Max", age: 12) // now to subscript
+extension person {
+    subscript(key ju: String) -> String? {
+        switch ju {
+        case "name": return name
+        case "age": return "\(age)"
+        default: return nil
+        }
+    }
+}
+
+soop[key: "name"] // now you can look things up by subscripting them.
+soop[key: "age"] // i quite frankly do not see subscripting working however its implementaiton is just as fine. i prefer enum.
+
+soop[key: "gender"] // works fine.
+// sunscripting parameters.
+// like function parameters you can add names before it to provide subscripting. a par of names
+
+
+// dynamic memeber lookup.
+@dynamicMemberLookup
+class instrument {
+    let brand: String
+    let year: Int
+    private let details: [String:String]
+    
+    //1
+    init(brand: String, year: Int, details: [String:String]) {
+        self.brand = brand
+        self.year = year
+        self.details = details
+    }
+    
+    //2
+    subscript(dynamicMember key: String) -> String {
+        switch key {
+          case "info": return "\(brand) made in \(year)."
+          default: return details[key] ?? ""
+        }
+    }
+}
+
+let instriment = instrument(brand: "kodeco", year: 2009, details: ["account": "soldier"])
+instriment.brand
+instriment.year
+instriment.info // this is what is meant by dynamicmember lookup. you can type what you please so long as it is there, within the code.
+instriment.pitch
+
+// dynamic member lookup can be inherited
+
+class vouch: instrument {}
+
+let saad = vouch(brand: "hello", year: 203, details: ["seven":"eleven"])
+saad.info // inherited.
+
+// enter the keypath way
+
+class me {
+    var firstname: String //📌
+    var lastname: String
+    
+    init(first: String, last: String) {
+        self.firstname = first
+        self.lastname = last
+    }
+}
+
+class you {
+    var who: me
+    var them: Int
+    var ours: [String : Int]
+    
+    init(the: Int, asss: [String : Int], when: me) {
+        self.ours = asss
+        self.them = the
+        self.who = when
+    }
+}
+
+var iwentHard = me(first: "visual", last: "studio")
+var vinegar = you(the: 90, asss: ["stant": 34], when: iwentHard)
+
+var little = \you.who
+let totoallo = vinegar[keyPath: little] // this is a bit complicated. a not so easy constructed way on accessing data.
+// you can append keypath
+
+var vello = little.appending(path: \.firstname)
+var ttoallo = vinegar[keyPath: vello] // a way to change between accesign data
+
+// iwentHard[keyPath: \.firstname] = "all to do with" tells me it is a read only and not write why
+// had to change 📌
+
+iwentHard[keyPath: \.firstname] = "all to do with him"
+// swift ui uses keypath and dynamic look up
+
+// keypath member finder
+struct Point {
+    let x, y: Int
+}
+
+//2
+@dynamicMemberLookup
+struct cicle {
+    let center: Point
+    let radiis: Int
+    
+    subscript(dynamicMember keypath: KeyPath<Point, Int>) -> Int {
+        center[keyPath: keypath]
+    }
+}
+
+let cent = Point(x: 12, y: 34)
+let circle = cicle(center: cent, radiis: 90)
+circle.x
+circle.radiis
+// thank you Christ Jesus.
+
