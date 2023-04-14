@@ -3558,3 +3558,298 @@ circle.x
 circle.radiis
 // thank you Christ Jesus.
 
+// chapter 21
+// rpattern matching
+
+// Open Xcode, go to File ▸ New ▸ Playground..., choose Blank and name it ResultBuilders.
+let cordinate = (x: 0, y: 0, z: 1)
+
+if (cordinate.y == 0) && (cordinate.x == 0) {
+    print("it happens as such")
+}
+
+if case(0,3,_) = cordinate {
+    print("hope it works just the same")
+} else {
+    print("it does!")
+}
+
+// good, getting started.
+// case can be used with guard, if or for
+
+func process(point: (x: Int,c: Int, y: Int )) -> String {
+    if case(0,0,0) = point {
+        return "good"
+    } else {
+        return "good, but not good"
+    }
+}
+
+func usingIt(point: (f: Int, r: Int)) -> String {
+    guard case(0,3) = point else {
+        return "yeap!"
+    }
+    return "when it doesnt match"
+}
+
+// going a step further and usign pattern in closures
+var closing: () -> Void
+closing = {()-> () in print("is it really")}
+closing()
+
+usingIt(point: (0, 3)) // works fine.
+
+// using switch statement
+func proprocesing(point: (x: Int, y: Int)) -> String {
+    let closed = -2...4
+    let middle = 5...8
+    
+    switch point {
+    case (closed, middle):
+        return "did it hose"
+    case (middle, closed):
+        return "somehow true"
+    default:
+        return "i always knew it"
+    }
+}
+
+proprocesing(point: (3, 2))
+
+// for loop
+let groupsizes = [1,2,3,4,5,6,7]
+for case 6 in groupsizes {
+    print("found it at")
+}
+
+// value binding pattern. use let or var to use within the execution block.
+// page 409
+
+
+// enum
+enum someofThem {
+    case whan, tumu, semani
+    case weer(nami:Int) // associated type.
+}
+
+var jackvile = someofThem.tumu
+jackvile
+
+if case .whan = jackvile { // match the value initiated and not the initiator.
+    print("got it")
+} else {
+    print("nah")
+}
+
+var brexit = someofThem.weer(nami: 34)
+
+switch brexit {
+case .weer(let nami):  // this is a simpler version, basically use the case to match
+    print("\(nami)")
+default:
+    print("nah")
+}
+
+let names: [String?] = ["Michelle", nil, "Brandon", "Christine", nil, "David"]
+
+for name in names {
+    if case nil = name {
+        continue
+    }
+    print(name!)
+}
+// thank you Jesus Christ.
+
+// json is a web api data
+
+let response: [Any] = ["goerge", 45, true]
+for elements in response {
+    switch elements {
+    case is String:
+        print("it is")
+    default:
+        print("not")
+    }
+    // so you use the the is in comparing jason file of file types. the same as using any in the initiator.
+}
+
+for element in response {
+    switch element {
+    case let text as String:
+        print("found \(text)")
+    default:
+        print("i dont knwo ")
+    }
+    // using the as again with the initiator.
+}
+
+for element in response {
+    switch element {
+    case let x as String:
+        print("found \(x)")
+    default:
+        print("worth a try")
+    }
+    // as is an integral part of pattern matching json files or web files of type any.
+}
+
+// more sophisticated way of using enums.
+enum levelstatus {
+    case completed
+    case inprogress(percent:Double)
+    case notstarted
+}
+
+let levels: [levelstatus] = [.completed, .inprogress(percent: 56.3), .notstarted]
+for leve in levels {
+    switch leve {
+    case .inprogress(let pass) where pass > 50:
+        print("it is \(pass)")
+    default:
+        break
+    }
+    // using enum with where clause.
+    // or switch with where clause.
+}
+
+func whatstimeIs(time: Int) -> String {
+    let morning = 0...11
+    let afternoon = 12..<17
+    let evening = 17..<22
+    let midnight = 22...24
+    
+    switch time {
+    case morning :
+        return "it's Morning hours \(time)"
+    case afternoon:
+        return "Afternoon hours \(time)"
+    case evening:
+        return "evening hours \(time)"
+    case midnight:
+        return "late hours \(time),  goodnight! 🌘"
+    default:
+        return "invalinde time \(time)"
+    }
+}
+
+whatstimeIs(time: 22)
+
+
+// avoiding the pyramid of doom
+enum numbers {
+    case interger(Int)
+    case dobleValue(Double)
+    case lookingbool(Bool)
+}
+
+let a = 5
+let b = 6
+let c: numbers? = .interger(9)
+let d: numbers? = .interger(8)
+
+/// bould a statement that checks for a and b relations, unwraps c and d and see's which is larger
+/// then prints the output
+
+func checkingRelations() -> () {
+    if a != b,
+       let c = c,
+       let d = d,
+       case .interger(let civ) = c,
+        case .interger(let dix) = d,
+       civ > dix {
+        print("\(a) is not equal to \(b)")
+        print("\(c) is greater than \(d)")
+        print("total is \(a + b + civ + dix)")
+    }
+}
+// here we used a , on if statement plus the case pattern matching to properly locate and even unwrap things.
+checkingRelations()
+
+guard let _ = c else {
+    // do not care about the value, but just checked to see whether the value does indeed exist
+    print("yeah!")
+    fatalError("it is what it is")
+}
+
+struct rectangle {
+    let width: Int
+    let height: Int
+    let backgorunf: String
+}
+
+var rect = rectangle(width: 34, height: 23, backgorunf: "petal")
+
+switch rect {
+case _ where .bitWidth == 10:
+    print("good")
+default:
+    print("bad")
+    // to check for value you can use the wildcard in case but without the let
+    // to be abel to match the value and check it.
+}
+
+func fibonachi(number: Int) -> Int {
+    switch number {
+    case let n where n <= 1:
+        // forgot the where clause. got have it. when you assign and start makign comparisons.
+        return 0
+    case 2:
+        return 1
+    case let n:
+       return fibonachi(number: n - 1) + fibonachi(number: n - 2)
+    }
+}
+
+print(fibonachi(number: 15))
+
+// fizz buzz calculator.
+
+let fun = 1...100
+for nun in fun {
+    switch (nun % 3, nun % 5) {
+    case (0, 0):
+        print("buzz fizz")
+    case (0, _) :
+        print("buzz")
+    case (_, 0):
+        print("fizz")
+    default:
+        print(nun)
+    }
+}
+// use pattern matching to resovled all these hard things.
+
+for nun in fun {
+    switch nun {
+    case let n where n % 3 == 0:
+        print("three divisible")
+    case let n where n % 5 == 0:
+        print("five div")
+    case let n where (n % 3) == 0 && (n % 5) == 0:
+        print("div by both")
+    default:
+        print(nun)
+    }
+}
+// prefer the previous one.
+
+func onetwo(put: Int) -> Int {
+    return put + 10
+}
+
+
+
+func fibonachiSquare(number: Int, fob: (Int) -> Int) -> Int {
+    let some = fob(number)
+    switch number {
+    case let n where n <= 1:
+        return 0
+    case 2:
+        return some + 23
+    case let n:
+        return fibonachiSquare(number: n - 1, fob: fibonachi) + fibonachiSquare(number: n - 2, fob: fibonachi)  + fibonachiSquare(number: n - 3, fob: fibonachi)
+    }
+}
+
+fibonachiSquare(number: 25, fob: fibonachi) // pass the function without the brackets
+
