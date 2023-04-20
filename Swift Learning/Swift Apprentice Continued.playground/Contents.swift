@@ -1,119 +1,128 @@
-// chapter 22. page 445 / 555
-// 100 pages to go.
+class Tutorial {
+    let tittle: String
+    unowned let author: Author // unowned
+    weak var editor: Editor?
+    
+    // closures
+    lazy var description: () -> String = {
+       [unowned self] in
+        "\(self.tittle) by \(self.author.name)"
+    }
+    
+    init(tittle: String, author: Author) {
+        self.tittle = tittle
+        self.author = author
+    }
+    
+    deinit {
+        print("Goodbye tutorial \(tittle)")
+    }
+}
 
+class Editor {
+    let name: String
+    //let author: Author
+    var tutorials: [Tutorial] = []
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    deinit {
+        print("Goodbye editor \(name)")
+    }
+}
+
+
+class Author {
+    let name: String
+    var tutorials: [Tutorial] = []
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    deinit {
+        print("Goodbye author \(name)")
+    }
+}
+
+do {
+    let author = Author(name: "Cosmin")
+    let tutorial = Tutorial(tittle: "Memory Management", author: author)
+    let editor = Editor(name: "Ray")
+    tutorial.editor = editor
+    editor.tutorials.append(tutorial)
+    print(tutorial.description())
+}
+// this is to avoid memory leakage.
+
+
+// closure memory management
+var samsom: () -> Void
+samsom = {() -> Void in print("hello now!")}
+samsom
+var zack = {(34 * 45)}()
+zack
+
+// ----------
+
+
+
+
+
+typealias codable = Encodable & Decodable
+// best use this wiht a struct and an enum. for it to work well.
+class vans: Codable {
+    var name: String
+    var age: Int
+    var title: String
+    
+    init(one: String, two:Int, three: String) {
+        self.name = one
+        self.age = two
+        self.title = three
+    }
+}
+
+// ----------------- side tour here.
 import JavaScriptCore
 import Foundation
-import SwiftUI
+var jesica = vans(one: "hello", two: 34, three: "omanshu")
+let jason = JSONEncoder()
+let benz = try jason.encode(jesica) // must assign it to something
 
-// encoding & decoding types.
+let decode = JSONDecoder()
+// here refer back to the type initiator.self
+try decode.decode(vans.self, from: benz)
 
-// func encode(to: Encoder) throws
-// init(from decoder: Decoder) throws
-
-typealias Codable = Encodable & Decodable
-
-// struct Employee {
-//    var name: String
-//    var id: Int
-// }
-
-struct Employee: Codable { // 👀
-    var name: String
-    var id: Int
-    var favouriteToy: Toy?
-}
-
-struct Toy: Codable {
-    var name: String
-}
-
-let toy1 = Toy(name: "Teddy Bear")
-let employee1 = Employee(name: "John Applebees", id: 7, favouriteToy: toy1)
-
-let jsonEncoder = JSONEncoder()
-let jsonData = try jsonEncoder.encode(employee1)
-// must use try encode because it might try and fail. to encode.
-
-print(jsonData)
-let jsonString = String(data: jsonData, encoding: .utf8)! // use string
-print(jsonString)
-// now you can send this over for use via an API portal.
-
-
-// now for decoding.
-let jsonDecoder = JSONDecoder()
-// on decode, revert back to the type with self. and pass in the jsonData.
-let employee2 = try jsonDecoder.decode(Employee.self, from: jsonData)
-
-// Renaming properties with CodingKeys
-// It turns out that the gifts department API requires that the employee ID appear as employeeId instead of id. Luckily, Swift provides a solution to this kind of problem.
-
-extension Employee {
-    // the extension doesn't need a conforming type like codable.
-    enum CodingKeys: String, CodingKey {
-        // CodingKey..
-        case id = "employeeId"
-        case name
-        case favouriteToy
-    }
-}
-print(jsonString) // it cnaged indeed.
-
-
-// what if you need to change everything so as to change conformance.
-
-enum codingKeys: String, CodingKey {
-    case id = "employeeId"
-    case name
-    case gift
-}
-
-// then i need to remove employee conformance on codable.
-//cextension Employee: Encodable {
-    // will be provided automatically.
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: codingKeys.self)
-//        try container.encode(name, forKey: .name)
-//        try container.encode(id, forKey: .id)
-//        try container.encode(favouriteToy?.name, forKey: .gift)
-//    }
-//}
-
-import XCTest
-
-class EncoderDecoderTests: XCTestCase {
-    var jsonEncoder: JSONEncoder!
-    var jsonDecoder: JSONDecoder!
-    var toy1: Toy!
-    var employee1: Employee!
+String(data: benz, encoding: .utf16BigEndian)! // this is to see what we encoded. the send it over the API.
+// ================================ back to escaping closures.
+// the closure keeper.
+// final class and keeps closrue and can be reused as such.
+final class functionkeeper {
+    private let function: () -> Void
     
-    override func setUp() {
-        super.setUp()
-        jsonEncoder = JSONEncoder()
-        jsonDecoder = JSONDecoder()
-        toy1 = Toy(name: "Teddy Bear")
-        employee1 = Employee(name: "John Appleseed", id: 7, favouriteToy: toy1)
+    init(function: @escaping() -> Void) {
+        self.function = function
     }
+    func run(){ function()}
 }
 
-// then to adding tests.
-
-func testEncoder() {
-    let jsonData = try? jsonEncoder.encode(employee1)
-    XCTAssertNotNil(jsonData, "Encoding failed")
-    
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    XCTAssertEqual(jsonString,"{\"name\":\"John Appleseed\",\"gift\":\"Teddy Bear\",\"employeeId\":7}")
+let name = "Cosmin"
+let f = functionkeeper {
+    print("hello \(name)")
 }
+f.run()
 
-func testDecoder() {
-  let jsonData = try! jsonEncoder.encode(employee1)
-  let employee2 = try? jsonDecoder.decode(Employee.self, from:
-jsonData)
-  XCTAssertNotNil(employee2)
-  XCTAssertEqual(employee1.name, employee2!.name)
-  XCTAssertEqual(employee1.id, employee2!.id)
-    XCTAssertEqual(employee1.favouriteToy?.name, employee2!.favouriteToy?.name)
-}
+// captures list.
 
-EncoderDecoderTests.defaultTestSuite.run()
+var counter = 0
+var g = {[counter] in print(counter)}
+counter = 1
+g()
+
+// use unowned if the data at hand will never be nil and simply be without,
+// use weak if the data is holder is likely to be nil.
+
+// Thank you Christ Jesus.
