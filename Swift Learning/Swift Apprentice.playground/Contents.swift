@@ -4287,3 +4287,856 @@ jsonData)
 }
 
 EncoderDecoderTests.defaultTestSuite.run()
+
+
+class Tutorial {
+    let tittle: String
+    unowned let author: Author // unowned
+    weak var editor: Editor?
+    
+    // closures
+    lazy var description: () -> String = {
+       [unowned self] in
+        "\(self.tittle) by \(self.author.name)"
+    }
+    
+    init(tittle: String, author: Author) {
+        self.tittle = tittle
+        self.author = author
+    }
+    
+    deinit {
+        print("Goodbye tutorial \(tittle)")
+    }
+}
+
+class Editor {
+    let name: String
+    //let author: Author
+    var tutorials: [Tutorial] = []
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    deinit {
+        print("Goodbye editor \(name)")
+    }
+}
+
+
+class Author {
+    let name: String
+    var tutorials: [Tutorial] = []
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    deinit {
+        print("Goodbye author \(name)")
+    }
+}
+
+do {
+    let author = Author(name: "Cosmin")
+    let tutorial = Tutorial(tittle: "Memory Management", author: author)
+    let editor = Editor(name: "Ray")
+    tutorial.editor = editor
+    editor.tutorials.append(tutorial)
+    print(tutorial.description())
+}
+// this is to avoid memory leakage.
+
+
+// closure memory management
+var samsom: () -> Void
+samsom = {() -> Void in print("hello now!")}
+samsom
+var zack = {(34 * 45)}()
+zack
+
+// ----------
+
+
+
+
+
+typealias codable = Encodable & Decodable
+// best use this wiht a struct and an enum. for it to work well.
+class vans: Codable {
+    var name: String
+    var age: Int
+    var title: String
+    
+    init(one: String, two:Int, three: String) {
+        self.name = one
+        self.age = two
+        self.title = three
+    }
+}
+
+// ----------------- side tour here.
+import JavaScriptCore
+import Foundation
+var jesica = vans(one: "hello", two: 34, three: "omanshu")
+let jason = JSONEncoder()
+let benz = try jason.encode(jesica) // must assign it to something
+
+let decode = JSONDecoder()
+// here refer back to the type initiator.self
+try decode.decode(vans.self, from: benz)
+
+String(data: benz, encoding: .utf16BigEndian)! // this is to see what we encoded. the send it over the API.
+// ================================ back to escaping closures.
+// the closure keeper.
+// final class and keeps closrue and can be reused as such.
+final class functionkeeper {
+    private let function: () -> Void
+    
+    init(function: @escaping() -> Void) {
+        self.function = function
+    }
+    func run(){ function()}
+}
+
+let name = "Cosmin"
+let f = functionkeeper {
+    print("hello \(name)")
+}
+f.run()
+
+// captures list.
+
+var counter = 0
+var g = {[counter] in print(counter)}
+counter = 1
+g()
+
+// use unowned if the data at hand will never be nil and simply be without,
+// use weak if the data is holder is likely to be nil.
+
+// Thank you Christ Jesus.
+// Chapter 25
+// values types & reference type.
+
+struct color: CustomStringConvertible {
+    var red, green, blue: Double
+    
+    var description: String {
+        "r: \(red) g:\(green) b: \(blue)"
+    }
+}
+
+extension color {
+    static var black = color(red: 0, green: 0, blue: 0)
+    static var white = color(red: 1, green: 1, blue: 1)
+    static var blue = color(red: 0, green: 0, blue: 1)
+    static var green = color(red: 0, green: 1, blue: 0)
+    // more ...
+}
+
+class Bucket {
+    var color: color
+    var isRefiled = false
+    
+    init(color: color) {
+        self.color = color
+    }
+    
+    func refill() {
+        isRefiled = true
+    }
+}
+
+let azurePaint = Bucket(color: .blue)
+let wallBluePaint = azurePaint
+wallBluePaint.isRefiled // false.
+azurePaint.refill()
+wallBluePaint.isRefiled // becomes true.
+
+extension color {
+    mutating func darken() {
+        red *= 0.9; green *= 0.9; blue *= 0.9
+    }
+}
+
+var azure = color.blue
+var wallblue = azure
+wallblue.darken()
+azure // value type.
+
+
+
+// property wrappers.
+// chapter 26
+
+struct Color {
+    var red: Double
+    var green: Double
+    var blue: Double
+}
+// there could be the assumption that the numbers fall in between 0 and 2
+// but we ca nenist the help of compiler,
+// hence welcome to property wrappers.
+
+@propertyWrapper
+struct zeroToOne {
+    private var value: Double
+    
+    private static func clamped(_ input: Double) -> Double {
+        min(max(input, 0), 1)
+    }
+    
+    init(wrappedValue: Double){
+        value = Self.clamped(wrappedValue)
+    }
+    
+    var wrappedValue: Double {
+        get { value }
+        set { value = Self.clamped(newValue)}
+    }
+}
+
+struct color {
+    @zeroToOne var red: Double
+    @zeroToOne var green: Double
+    @zeroToOne var blue: Double
+}
+
+var thomas = color(red: 3, green: 4, blue: 1)
+print(thomas)
+
+// you can use proprty wrappers with argumetns too.
+func printValue(@zeroToOne _ value: Double) {
+    print("the wrapper value is, \(value)")
+}
+printValue(3.14) // forcing an output to a desired number.
+
+
+// example 2
+@propertyWrapper
+struct ZeroToOneV2 {
+    private var value: Double
+    
+    init(wrappedValue: Double) {
+        value = wrappedValue
+    }
+    
+    var wrappedValue: Double {
+        get { min(max(value, 0), 1)}
+        set { value = newValue }
+    }
+    
+    var projectedValue: Double { value }
+}
+
+func printV2(@ZeroToOneV2 _ value: Double) {
+    print("the wrapper value \(value)")
+    print("the projected value \($value)")
+}
+
+printV2(3.14)
+
+// Int.random(in: 1...56)
+
+// using generic property wrapper.
+
+@propertyWrapper
+struct ZeroTo<Value: Numeric & Comparable> {
+    private var value: Value
+    let upper: Value
+    
+    init(wrappedValue: Value, upper: Value) {
+        value = wrappedValue
+        self.upper = upper
+    }
+    
+    var wrappedValue: Value {
+        get { min(max(value, 0), upper) }
+        set { value = newValue }
+    }
+}
+
+func checkers(@ZeroTo(upper: 10) _ value: Double){ // if you have one too many options.
+    // i still find this redundant although a good tool to know.
+    print("the wrapper value \(value)")
+}
+
+checkers(239)
+// page 494
+
+// back to refernce type.
+
+//@propertyWrapper
+//public struct ValidateDate {
+//    private var storage: Date? = nil
+//    private(set) var formatter = DateFormatter()
+    // need to know more about this.
+    
+//    public init(wrappedValue: String){
+//        self.formatter.dateFormat = "yyyy-mm-dd"
+//        self.wrappedValue = wrappedValue
+//    }
+    
+//    public var wrappedValue: String {
+//        set {
+//            self.storage = formatter.date(from: newValue)
+//        }
+//        get {
+//            if let date = self.storage {
+//                return formatter.string(from: date)
+//            } else {
+//                return " invalid !"
+//            }
+//        }
+//    }
+//}
+
+// replicate and perfect.
+func changeTo<T>(_ item: T){
+    print("we have us an \(item)")
+}
+
+print(Double(45))
+ 
+@propertyWrapper
+struct ConvertToDouble {
+    
+    private var input: Double
+    // private
+    
+    private static func changeTo(_ item: Int) -> Double {
+        return Double(item)
+    }
+    
+    init<T>(wrappedValue: T) {
+        input = Self.changeTo(wrappedValue as! Int)
+    }
+    
+    var wrappedValue: Double {
+        get {
+            input
+        }
+        set {
+            input = Self.changeTo(Int(newValue)) // because of the int on items.
+        }
+    }
+}
+
+// build but wont work.
+
+// need to look into a bit further with this one.
+// protocal Oriented Programing.
+// chapter 27.
+
+
+protocol TeamRecord {
+    var wins: Int { get }
+    var loses: Int { get }
+    var winningPercent: Double { get } //⚠️
+}
+
+
+// you can add extensions to protocal and we are about to find out how. and why
+extension TeamRecord {
+    var gamesPlayed: Int {
+        wins + loses
+    }
+}
+
+struct BaseballRecord: TeamRecord { //adhere to protocal
+    var wins: Int
+    var loses: Int
+    
+    var winningPercent: Double {
+        Double(wins) / Double(wins + loses)
+    }
+}
+
+let sanFranciscoSwifts = BaseballRecord(wins: 10, loses: 5)
+sanFranciscoSwifts.winningPercent
+sanFranciscoSwifts.gamesPlayed // was computed in the protocol extension.
+
+struct BaskteBallRecord: TeamRecord {
+    // this is somewhat similar to the baseball prototype.
+    var wins: Int
+    var loses: Int
+    var seasonLength = 80 // added
+    
+    // since this is included wiht others, its better to simplyfy it with swift protocols.
+    var winningPercent: Double {
+        Double(wins) / Double(wins + loses)
+    }
+}
+
+// to save the day with protocols.
+
+extension TeamRecord {
+    // this is the very winningpercantage from within the protocol
+    var winningPercent: Double {
+        Double(wins) / Double(wins + loses)
+    }
+}
+
+// now that i have implemented the winning percentage. it goes to show that if i do not complete it, the compiler will complete it for me.
+
+struct missouriCats: TeamRecord {
+    var wins: Int
+    var loses: Int
+    let seasonLength = 82
+    var winningPercent: Double
+}
+let kansasCity = missouriCats(wins: 60, loses: 56, winningPercent: 43)
+// you can choose to include it manually or leave it up to the calculations.
+// which ever works is fine.
+kansasCity.winningPercent
+kansasCity.gamesPlayed
+
+
+struct HockeyRecord: TeamRecord {
+    var wins: Int
+    var loses: Int
+    var ties: Int
+    
+    var winningPercent: Double {
+        Double(wins) / Double(wins + loses + ties)
+    }
+    
+    // you can also do the same by editing the extended protocol. like i did here.
+    var gamesPlayed: Int {
+        wins + loses + ties
+    }
+}
+let chicacoBalls = HockeyRecord(wins: 34, loses: 23, ties: 55)
+chicacoBalls.winningPercent
+chicacoBalls.gamesPlayed
+
+
+// mini excercise
+extension CustomStringConvertible {
+    var reminder: String {
+        "Don't forget to print description"
+    }
+}
+
+struct myStruct: CustomStringConvertible {
+    var name: String
+    var last: String
+    
+    var description: String {
+        "the name is \(name) \(last)"
+    }
+}
+
+var display = myStruct(name: "Hanalue", last: "Manalue")
+display.description
+display.reminder
+
+// understanding protocal extension dispatch
+// Static dispatch means the compiler chooses the method or property used at compile- time based on what it knows about the type.
+
+//✨
+protocol WinLoss {
+    var wins: Int { get }
+    var losess: Int { get }
+}
+
+// .............. and declared the following extension.
+extension WinLoss {
+    var winningPercantage: Double {
+        Double(wins) / Double(wins + losess)
+    }
+}
+
+struct CricketRecord: WinLoss {
+    var wins: Int
+    var losess: Int
+    var draws: Int
+    
+    var winningPercantage: Double {
+        Double(wins) / Double(wins + losess + draws)
+    }
+}
+// which one is likely to be selected at compile time.
+
+let miamiTuple = CricketRecord(wins: 8, losess: 7, draws: 1)
+let winloss: WinLoss = miamiTuple // protocal in the middle to conform to.
+                                // this must be the one that changes miami to old formular.
+
+miamiTuple.winningPercantage
+winloss.winningPercantage
+
+
+// type contraits
+protocol PostSeasonEligibility {
+    var minimumWinsForPlayoo: Int { get }
+}
+
+
+// you can add your own conformance type.
+extension TeamRecord where Self: PostSeasonEligibility {
+    var isplayoffEligable: Bool {
+        wins > minimumWinsForPlayoo
+    }
+}
+// where self: protocol means that the two protocols are now joined. and can work on a struct that calls them both
+
+// after dropping.
+
+// advanced protocols and generics.
+// chapter 28.
+
+protocol Pet {
+    associatedtype food
+    var name: food { get }
+}
+
+struct Cat: Pet {
+    typealias food = String
+    
+    var name: food
+}
+// understanding existential type.
+// pet is the protocal and instance is the struct being field inside.
+// var somePet: Pet = Cat(name: "whiskers")
+
+//chapter 16 example;.
+protocol WeightCalculatable {
+    associatedtype weightype
+    var weight: weightype { get }
+}
+
+class Truck: WeightCalculatable {
+    typealias weightype = Int
+    var weight: weightype { 100 }   // emphasis here is on the type changability
+}
+
+class flowers: WeightCalculatable {  // the ability to define weight to anything you
+    typealias weightype = Double     // please
+    var weight: Double { 0.0025 }
+}
+
+class catweight: WeightCalculatable {
+    typealias weightype = Cat
+    var weight: Cat { Cat(name: "heildi pum")}
+}
+
+
+//  expressing relationships between types. { protocol types }
+protocol Product {} // 1
+
+protocol ProductionLine { // 2
+    func produce() -> Product // 1  ⚠️
+}
+
+protocol Factory {
+    var productionLines: [ProductionLine] { get }
+}
+
+extension Factory {
+    func produce() -> [Product] { //1
+        var items: [Product] = []
+        productionLines.forEach { items.append($0.produce())}
+        print("Finished production")
+        print("-------------------")
+        return items
+    }
+}
+// define the concrete types. to implement the factory
+struct Cars: Product {
+    init(){
+        print("Producing one awesome Car 🚖")
+    }
+}
+
+struct CarProductionLine: ProductionLine {
+    func produce() -> Product { // ⚠️
+        Cars()
+    }
+}
+
+struct Carfactory: Factory {
+    var productionLines: [ProductionLine] = []
+}
+// lets start the manufacturing process.
+
+var carFactory = Carfactory()
+carFactory.productionLines = [CarProductionLine(), CarProductionLine()]
+carFactory.produce()
+
+
+struct Chocolate: Product {
+  init() {
+print("Producing one chocolate bar + ") }
+}
+struct ChocolateProductionLine: ProductionLine {
+  func produce() -> Product {
+    Chocolate()
+  }
+}
+var oddCarFactory = Carfactory()
+oddCarFactory.productionLines = [CarProductionLine(),
+ChocolateProductionLine()]
+oddCarFactory.produce()
+// cant produce cars and chocolates at the same time.
+
+
+// generic protocols
+
+import Foundation
+
+protocol Product {
+    init()
+    // Product now includes init(), so the production line can create new products without having to know the concrete type of that product.
+}
+
+protocol ProductionLine {
+    associatedtype ProductType
+    func produce() -> ProductType
+}
+
+protocol Factory {
+    associatedtype ProductType
+    func produce() -> [ProductType]
+}
+
+protocol Warehouse {
+    associatedtype producedThings
+    func produce() -> [producedThings]
+}
+// ------------------------------------------
+struct Car: Product {
+    init() {
+        print("Producing one awesome Car 🚖")
+    }
+}
+
+struct Chocolate: Product {
+    init(){
+        print("Producing one chocolate bar 🍫")
+    }
+}
+// -------------------------------------------
+
+// Instead of creating specific production lines and factories for cars and chocolates, you can create a single, generic production line and factory:
+struct GenericProductionLine<P: Product>: ProductionLine {
+    func produce() -> P {
+        P()
+    }
+}
+
+struct GenericFactory<P:Product>: Factory {
+    var productionLines: [GenericProductionLine<P>] = []
+    
+    func produce() -> [P] {
+        var newItems: [P] = []
+        productionLines.forEach { newItems.append($0.produce())}
+        print("Finished Production")
+        print("-------------------")
+        return newItems
+    }
+}
+var carFactory = GenericFactory<Car>()
+carFactory.productionLines = [GenericProductionLine<Car>(),GenericProductionLine<Car>()]
+carFactory.produce()
+
+
+// ----------- Excercise
+struct GenericWarehouse<P:Product>: Warehouse {
+    var productionLines: [GenericProductionLine<P>] = []
+    
+    func produce() -> [P] {
+        var store: [P] = []
+        productionLines.forEach {store.append($0.produce())}
+        return store
+    }
+}
+
+var chocoFactory = GenericWarehouse<Chocolate>()
+chocoFactory.productionLines = [GenericProductionLine(), GenericProductionLine(), GenericProductionLine()]
+chocoFactory.produce()
+chocoFactory.productionLines
+
+
+
+// testing Generics
+func talktomelady<P>(_ one: P) -> P {
+    return one
+}
+
+talktomelady("Hello Sam i Daniels ! 89")
+talktomelady(34)
+talktomelady(45.6)
+talktomelady(true)
+
+
+// opaque return types { with the WORD SOME }
+func david() -> some Numeric { // works somehow.
+    return 89.3
+}
+
+func savanah() -> some Equatable {
+    return true
+}
+
+// excercise.
+
+/// • A train has 75 Pieces.
+/// • A train robot can assemble 500 pieces per minute.
+/// • Use an opaque return type to hide the type of robot you return.
+func robot(_ some: Int) -> some Numeric {
+    var efficiency = 500
+    var timelapsed = 60
+    var time = efficiency / timelapsed
+    
+    return Double(some / time)
+}
+// off to concurrency.
+// enter concurrency.
+
+import SwiftUI // ⚠️
+//Task {
+//    print("doing some work on task")
+//}
+//print("doing some work on main actor")
+
+
+
+print("-------------------")
+// challange order
+//Task {
+//    print("Doing some work on a task")
+//    let sum = (1...100).reduce(0, +)
+//    print("1 + 2 + 3 ... 100  = \(sum)")
+//}
+//print("doing some work on main actor")
+
+// And herein lies the fundamental challenge with concurrent programming: The order of events can change depending on the input size, processing power or how the operating system scheduler decides to schedule tasks to work on.
+
+
+// cancelling a task.
+let task = Task {
+  print("Doing some work on a task")
+  let sum = (1...5000).reduce(0, +)
+  try Task.checkCancellation()
+  print("1 + 2 + 3 ... 100 = \(sum)")
+}
+print("Doing some work on the main actor")
+task.cancel()
+
+// now it works are the text book. all depending on the computational size. but this cannot be relied upon all the time.
+// coorperative cancellation.
+
+// suspending a task.
+Task {
+    print("Humphrey Hanson")
+    // await makes it wait which is to achieve what we want. but try must be there.
+    // same as with errors.
+    try await Task.sleep(nanoseconds: 1_000)
+    print("Is Going Places")
+}
+
+// wrapping it all into a function
+
+func SaySomethingToEm() async throws {
+    print("Humphrey Hanson")
+    // await makes it wait which is to achieve what we want. but try must be there.
+    // same as with errors.
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    // any function that has must have a throw. period.
+    // and this cas async
+    print("Is Going Places")
+}
+
+Task {
+   try await SaySomethingToEm()
+    // also you must use it out here with its full glory.
+    // await and try.
+    // musch like within the funciton itself. whrapped around task.
+}
+
+
+// fetching the API
+struct Domains: Decodable { // 1
+    let data: [Domain]
+}
+
+struct Domain: Decodable {
+    let attribute: Attributes
+}
+
+struct Attributes: Decodable {
+    let name: String
+    let description: String
+    let level: String
+}
+
+func fetchDomains() async throws -> [Domain] {
+    // it states that this is a long process.
+    // that it can suspend and also throw an error if it is not succesful.
+    
+    let url = URL(string: "https://api.raywenderlich.com/api/domains")!
+    // 1
+    let (data, _) = try await URLSession.shared.data(from: url)
+    // 2
+    return try JSONDecoder().decode(Domains.self, from: data).data
+                
+}
+
+// to test it out.
+Task {
+    do {
+        let domains = try await fetchDomains()
+        for domain in domains {
+            let attr = domain.attribute
+            print("\(attr.name): \(attr.description) - \(attr.level)")
+        }
+    } catch {
+        print(error)
+    }
+}
+
+// Asynchronous sequences.
+
+func findTittle(url: URL) async throws -> String? {
+    for try await line in url.lines {
+        if line.contains("<title>") {
+            return line.trimmingCharacters(in: .whitespaces)
+        }
+    }
+    return nil
+}
+
+Task {
+    if let tittle = try await findTittle(url:URL(string: "https://www.kodeco.com/home")!) {
+        print(tittle)
+    }
+}
+
+// suppose i want to get the tittle to the web pages.
+func findingTitleSerial(first: URL, second: URL) async throws -> (String?, String?) {
+    async let tittle1 = try await findTittle(url: first)
+    async let title2 = try await findTittle(url: second)
+    let headings = try await [tittle1, title2]
+    return(headings[0], headings[1])
+}
+
+// asynchonous properties and subscripts
+// you can also incorporate async with computed properties.
+extension Domains {
+    static var domains: [Domain] {
+        get async throws {
+            try await fetchDomains()
+        }
+    }
+}
+
+// i can test it with dump.
+
+Task {
+    dump(try await Domains.domains)
+}
+
+// Thank you Grace.
+// In Jesus Christ name. 
